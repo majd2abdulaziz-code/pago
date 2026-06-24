@@ -776,17 +776,57 @@ document.querySelectorAll('.swatch').forEach(s => {
 
 // ===== SUBMIT =====
 function submitForm() {
+  const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbyXut3oiy0bMiG240FaXHH9mqV_wStgBF2HLViMW8O0-WHXYjdi3vLpiqWuW7iADKkrXQ/exec';
+
   const nameAr = document.getElementById('cv-nameAr')?.value.trim() ||
                  document.getElementById('menu-nameAr')?.value.trim() ||
                  document.getElementById('card-nameAr')?.value.trim() || 'عميل';
-  const phone = document.getElementById('cv-phone')?.value.trim() ||
-                document.getElementById('menu-phone')?.value.trim() ||
-                document.getElementById('card-phone')?.value.trim() || '0000';
-  const last4 = phone.replace(/\D/g,'').slice(-4);
+  const phone  = document.getElementById('cv-phone')?.value.trim() ||
+                 document.getElementById('menu-phone')?.value.trim() ||
+                 document.getElementById('card-phone')?.value.trim() || '0000';
+  const last4     = phone.replace(/\D/g,'').slice(-4);
   const firstName = nameAr.split(' ')[0];
-  const ref = `PG-${firstName}-${last4}`;
+  const ref       = `PG-${firstName}-${last4}`;
+
+  const data = {
+    ref,
+    service:     currentService,
+    nameAr:      document.getElementById('cv-nameAr')?.value || document.getElementById('menu-nameAr')?.value || document.getElementById('card-nameAr')?.value || '',
+    nameEn:      document.getElementById('cv-nameEn')?.value || document.getElementById('card-nameEn')?.value || '',
+    title:       document.getElementById('cv-title')?.value  || document.getElementById('card-title')?.value  || '',
+    city:        document.getElementById('cv-city')?.value   || document.getElementById('menu-city')?.value   || '',
+    phone,
+    email:       document.getElementById('cv-email')?.value  || document.getElementById('card-email')?.value  || '',
+    bio:         document.getElementById('cv-bio')?.value    || document.getElementById('menu-desc')?.value   || '',
+    skills:      document.getElementById('cv-skill-input')?.value || '',
+    achievements:document.getElementById('cv-achievements')?.value || '',
+    certs:       document.getElementById('cv-certs')?.value  || '',
+    certDetails: document.getElementById('cv-cert-details')?.value || '',
+    linkedin:    document.getElementById('cv-li')?.value     || '',
+    github:      document.getElementById('cv-gh')?.value     || '',
+    behance:     document.getElementById('cv-be')?.value     || '',
+    twitter:     document.getElementById('cv-tw')?.value     || '',
+    notes:       document.getElementById('specialNotes')?.value || '',
+    payment:     document.getElementById('pref-pay')?.value  || 'دفع كامل'
+  };
+
+  // أرسل للشيت عبر JSONP لتجاوز CORS
+  const script = document.createElement('script');
+  const params = new URLSearchParams({ data: JSON.stringify(data) });
+  script.src = SHEETS_URL + '?' + params.toString();
+  document.body.appendChild(script);
+  setTimeout(() => document.body.removeChild(script), 5000);
+
+  // أرسل على واتساب أيضاً
   const isEn = document.body.classList.contains('en');
-  document.getElementById('refNum').textContent = (isEn ? 'Order #: ' : 'رقم الطلب: ') + ref;
+  const msg = isEn
+    ? `New order from Pago!\nRef: ${ref}\nService: ${currentService}\nName: ${data.nameAr}\nPhone: ${phone}`
+    : `طلب جديد من Pago!\nرقم الطلب: ${ref}\nالخدمة: ${currentService}\nالاسم: ${data.nameAr}\nالجوال: ${phone}`;
+  window.open(`https://wa.me/966537292913?text=${encodeURIComponent(msg)}`, '_blank');
+
+  // أظهر شاشة النجاح
+  const isEnMsg = document.body.classList.contains('en');
+  document.getElementById('refNum').textContent = (isEnMsg ? 'Order #: ' : 'رقم الطلب: ') + ref;
   document.getElementById('mainForm').style.display = 'none';
   document.getElementById('successScreen').style.display = 'block';
   window.scrollTo({ top: 0, behavior: 'smooth' });
