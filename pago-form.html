@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pago — اطلب خدمتك</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #080808;
+  --bg-2:     #0F0F0F;
+  --bg-3:     #161616;
+  --accent:   #d2ceed;
+  --accent-2: #fcfcfe;
+  --chrome:   #A78BFA;
+  --text:     #F0F0F0;
+  --text-2:   #A0A0A0;
+  --text-3:   #555;
+  --border:   rgba(255,255,255,0.06);
+  --border-h: rgba(255,255,255,0.12);
+  --success:  #34D399;
+  --sans:     'Inter', sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;direction:rtl}
+
+/* NAV */
+nav{background:rgba(8,8,8,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;position:sticky;top:0;z-index:99}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-ring{width:32px;height:32px;border-radius:50%;border:2px solid #A78BFA;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;overflow:hidden;background:rgba(167,139,250,0.08)}
+.logo-pupil{width:12px;height:12px;border-radius:50%;background:#A78BFA;animation:eye-move 4s ease-in-out infinite}
+@keyframes eye-move{
+  0%{transform:translate(0,0) scale(1)}
+  15%{transform:translate(4px,-2px) scale(0.95)}
+  30%{transform:translate(-3px,3px) scale(1)}
+  45%{transform:translate(3px,3px) scale(0.95)}
+  60%{transform:translate(-4px,-2px) scale(1)}
+  75%{transform:translate(0,0) scale(0.3)}
+  80%{transform:translate(0,0) scale(1)}
+  100%{transform:translate(0,0) scale(1)}
+}
+.logo-text{font-size:16px;font-weight:600;color:#A78BFA;letter-spacing:0.02em}
+.nav-right{display:flex;align-items:center;gap:10px}
+
+/* CURRENCY SELECTOR */
+.currency-wrap{position:relative}
+.currency-btn{display:flex;align-items:center;gap:6px;background:var(--bg-3);border:1px solid var(--border-h);border-radius:8px;padding:6px 12px;font-size:12px;color:var(--text-2);cursor:pointer;font-family:var(--sans);transition:all .2s}
+.currency-btn:hover{border-color:var(--accent);color:var(--text)}
+.currency-flag{font-size:14px}
+.currency-dropdown{position:absolute;top:calc(100% + 6px);left:0;background:var(--bg-2);border:1px solid var(--border-h);border-radius:10px;padding:6px;min-width:180px;display:none;z-index:200;box-shadow:0 8px 32px rgba(0,0,0,0.5)}
+.currency-dropdown.open{display:block}
+.currency-option{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:6px;font-size:12px;color:var(--text-2);cursor:pointer;transition:background .15s}
+.currency-option:hover{background:var(--bg-3);color:var(--text)}
+.currency-option.active{color:var(--accent)}
+
+/* LAYOUT */
+.layout{max-width:760px;margin:0 auto;padding:2.5rem 1.5rem}
+
+/* SLIDER */
+.slider-wrap{position:relative;margin-bottom:2rem}
+.slider-track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:4px 2px 12px;scrollbar-width:none}
+.slider-track::-webkit-scrollbar{display:none}
+.service-card{flex:0 0 200px;scroll-snap-align:start;background:var(--bg-2);border:1.5px solid var(--border);border-radius:14px;padding:1.2rem 1rem;text-align:center;cursor:pointer;transition:all .2s}
+.service-card:hover{border-color:var(--border-h)}
+.service-card.active{border-color:rgba(167,139,250,0.6);background:rgba(167,139,250,0.07)}
+.service-card-icon{font-size:28px;margin-bottom:8px}
+.service-card-name{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px;display:block}
+.service-card-price{font-size:11px;color:#A78BFA;font-weight:500}
+.service-card-badge{display:inline-block;margin-top:6px;font-size:9px;font-weight:600;padding:2px 8px;border-radius:6px;background:rgba(167,139,250,0.12);color:#A78BFA}
+.slider-arrows{display:flex;justify-content:center;gap:8px;margin-top:4px}
+.slider-arrow{background:var(--bg-3);border:1px solid var(--border-h);border-radius:8px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-2);font-size:14px;transition:all .2s}
+.slider-arrow:hover{border-color:#A78BFA;color:#A78BFA}
+
+/* FORM CARD */
+.form-card{background:var(--bg-2);border:1px solid var(--border);border-radius:16px;padding:2rem;margin-bottom:1rem}
+.form-title{font-size:15px;font-weight:600;color:var(--text);margin-bottom:1.4rem;display:flex;align-items:center;gap:8px}
+.form-section{display:none}
+.form-section.active{display:block;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* FIELDS */
+.field{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.field label{font-size:12px;font-weight:500;color:var(--text-2)}
+.field input,.field textarea,.field select{padding:10px 13px;background:var(--bg-3);border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);color:var(--text);outline:none;transition:border-color .2s;width:100%}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--accent)}
+.field input::placeholder,.field textarea::placeholder{color:var(--text-3)}
+.field textarea{min-height:80px;resize:vertical;line-height:1.6}
+.field select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:left 12px center}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* IDENTITY TOGGLE */
+.identity-toggle{margin-bottom:16px}
+.identity-label{font-size:12px;font-weight:500;color:var(--text-2);margin-bottom:8px;display:block}
+.toggle-options{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.toggle-opt{background:var(--bg-3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;cursor:pointer;transition:all .2s;text-align:center}
+.toggle-opt:hover{border-color:var(--border-h)}
+.toggle-opt.active{border-color:var(--accent);background:rgba(124,107,240,0.08)}
+.toggle-opt-title{font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px}
+.toggle-opt-price{font-size:11px;color:var(--accent)}
+.toggle-opt-desc{font-size:10px;color:var(--text-3);margin-top:2px}
+
+/* PRICE SUMMARY */
+.price-summary{background:rgba(124,107,240,0.08);border:1px solid rgba(124,107,240,0.2);border-radius:12px;padding:1.2rem 1.4rem;margin-bottom:1.2rem;display:flex;align-items:center;justify-content:space-between}
+.price-label{font-size:12px;color:var(--text-2)}
+.price-amount{font-size:1.6rem;font-weight:700;background:linear-gradient(135deg,#fff,var(--chrome));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.price-currency{font-size:12px;color:var(--text-3);margin-top:2px}
+
+/* TAGS INPUT */
+.tags-wrap{display:flex;flex-wrap:wrap;gap:6px;padding:8px;background:var(--bg-3);border:1px solid var(--border);border-radius:8px;min-height:44px;cursor:text;transition:border-color .2s}
+.tags-wrap:focus-within{border-color:var(--accent)}
+.tag{display:inline-flex;align-items:center;gap:4px;background:rgba(124,107,240,0.15);border-radius:4px;padding:3px 8px;font-size:11px;color:var(--chrome)}
+.tag-remove{background:none;border:none;color:var(--text-3);cursor:pointer;font-size:13px;padding:0;line-height:1}
+.tag-remove:hover{color:#FF5F57}
+.tag-input{border:none;outline:none;background:transparent;font-size:12px;color:var(--text);font-family:var(--sans);flex:1;min-width:100px;padding:2px 4px}
+.tag-input::placeholder{color:var(--text-3)}
+
+/* COLOR SWATCHES */
+.swatches{display:flex;gap:8px;flex-wrap:wrap}
+.swatch{width:28px;height:28px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:transform .15s,border-color .15s;position:relative}
+.swatch:hover{transform:scale(1.15)}
+.swatch.selected{border-color:#fff}
+.swatch.selected::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;font-weight:700}
+
+/* SUBMIT BTN */
+.btn-submit{width:100%;padding:14px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;font-family:var(--sans);cursor:pointer;transition:all .2s;margin-top:.5rem}
+.btn-submit:hover{background:var(--accent-2);transform:translateY(-1px);box-shadow:0 8px 24px rgba(124,107,240,0.3)}
+
+/* PROGRESS */
+.progress-wrap{height:2px;background:var(--bg-3);border-radius:1px;margin-bottom:2rem}
+.progress-bar{height:2px;background:linear-gradient(90deg,var(--accent),var(--chrome));border-radius:1px;transition:width .4s ease;width:33%}
+
+/* STEP NAV */
+.step-nav{display:flex;justify-content:space-between;margin-top:1.2rem;gap:10px}
+.btn-back{background:transparent;border:1px solid var(--border-h);color:var(--text-2);padding:10px 20px;border-radius:8px;font-size:13px;font-family:var(--sans);cursor:pointer;transition:all .2s}
+.btn-back:hover{border-color:var(--accent);color:var(--text)}
+.btn-next{background:var(--accent);color:#fff;padding:10px 24px;border-radius:8px;font-size:13px;font-weight:600;font-family:var(--sans);border:none;cursor:pointer;transition:all .2s}
+.btn-next:hover{background:var(--accent-2)}
+
+/* SUCCESS */
+.success-screen{display:none;text-align:center;padding:3rem 1.5rem}
+.success-icon{width:64px;height:64px;border-radius:50%;background:rgba(52,211,153,0.12);border:2px solid var(--success);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 1.5rem}
+.success-title{font-size:1.4rem;font-weight:700;margin-bottom:.8rem}
+.success-sub{font-size:14px;color:var(--text-2);line-height:1.8;margin-bottom:1.5rem}
+.success-ref{font-size:12px;color:var(--accent);background:rgba(124,107,240,0.08);border:1px solid rgba(124,107,240,0.2);border-radius:8px;padding:10px 18px;display:inline-block}
+
+/* LANG */
+.lang-ar{display:block}.lang-en{display:none}
+body.en .lang-ar{display:none}
+body.en .lang-en{display:block}
+body.en{direction:ltr}
+
+/* RESPONSIVE */
+@media(max-width:580px){.service-tabs{grid-template-columns:1fr}.row2{grid-template-columns:1fr}.toggle-options{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo" onclick="window.location.href='pago-index.html'" style="cursor:pointer">
+    <div class="logo-ring"><div class="logo-pupil"></div></div>
+    <span class="logo-text">Pago</span>
+  </div>
+  <div class="nav-right">
+    <div class="currency-wrap">
+      <button class="currency-btn" onclick="toggleCurrency()" id="currencyBtn">
+        <span class="currency-flag" id="currFlag">🇸🇦</span>
+        <span id="currCode">SAR</span> ▾
+      </button>
+      <div class="currency-dropdown" id="currDropdown">
+        <div class="currency-option active" onclick="setCurrency('SAR','🇸🇦',1)">🇸🇦 SAR</div>
+        <div class="currency-option" onclick="setCurrency('AED','🇦🇪',0.98)">🇦🇪 AED</div>
+        <div class="currency-option" onclick="setCurrency('KWD','🇰🇼',0.12)">🇰🇼 KWD</div>
+        <div class="currency-option" onclick="setCurrency('QAR','🇶🇦',1.37)">🇶🇦 QAR</div>
+        <div class="currency-option" onclick="setCurrency('BHD','🇧🇭',0.14)">🇧🇭 BHD</div>
+        <div class="currency-option" onclick="setCurrency('OMR','🇴🇲',0.14)">🇴🇲 OMR</div>
+      </div>
+    </div>
+    <button id="langToggleBtn" onclick="toggleFormLang()" style="background:none;border:1px solid rgba(255,255,255,0.2);border-radius:6px;padding:5px 12px;font-size:12px;color:rgba(255,255,255,0.7);cursor:pointer;font-family:var(--sans);transition:all .2s">EN</button>
+  </div>
+</nav>
+
+<div class="layout">
+
+  <!-- SERVICE SELECTOR -->
+  <div id="mainForm">
+    <div style="text-align:center;margin-bottom:1.8rem">
+      <div style="font-size:11px;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px">
+        <span class="lang-ar">اطلب خدمتك</span>
+        <span class="lang-en">Request Your Service</span>
+      </div>
+      <h1 style="font-size:1.5rem;font-weight:700;margin-bottom:6px">
+        <span class="lang-ar">ما الذي تودّ تحويله إلى موقع إلكتروني؟</span>
+        <span class="lang-en">What would you like to turn into a website?</span>
+      </h1>
+      <p style="font-size:13px;color:var(--text-2)">
+        <span class="lang-ar">اختر الخدمة المناسبة وسنبني لك موقعك الاحترافي</span>
+        <span class="lang-en">Choose your service and we'll build your professional website</span>
+      </p>
+    </div>
+
+    <!-- PROGRESS -->
+    <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+    <!-- SERVICE SLIDER -->
+    <div class="slider-wrap">
+      <div class="slider-track" id="sliderTrack">
+        <div class="service-card active" onclick="selectService('cv-basic')" id="tab-cv-basic">
+          <div class="service-card-icon">🎓</div>
+          <div class="service-card-name lang-ar">سيرة — خريج جديد</div>
+          <div class="service-card-name lang-en">CV — Fresh Graduate</div>
+          <div class="service-card-price" id="price-cv-basic">يبدأ من 149 SAR</div>
+          <div class="service-card-badge lang-ar">الأكثر طلباً</div>
+          <div class="service-card-badge lang-en">Most Popular</div>
+        </div>
+        <div class="service-card" onclick="selectService('cv-pro')" id="tab-cv-pro">
+          <div class="service-card-icon">💼</div>
+          <div class="service-card-name lang-ar">سيرة — محترف</div>
+          <div class="service-card-name lang-en">CV — Professional</div>
+          <div class="service-card-price" id="price-cv-pro">يبدأ من 590 SAR</div>
+          <div class="service-card-badge lang-ar">مميزة ⭐</div>
+          <div class="service-card-badge lang-en">Premium ⭐</div>
+        </div>
+        <div class="service-card" onclick="selectService('menu')" id="tab-menu">
+          <div class="service-card-icon">☕</div>
+          <div class="service-card-name lang-ar">قائمة — مطاعم، كوفيهات، وصالونات</div>
+          <div class="service-card-name lang-en">Menu — Restaurants, Cafés & Salons</div>
+          <div class="service-card-price" id="price-menu">يبدأ من 999 SAR</div>
+          <div class="service-card-badge lang-ar">الأكثر تنوعاً</div>
+          <div class="service-card-badge lang-en">Most Versatile</div>
+        </div>
+        <div class="service-card" onclick="selectService('card-personal')" id="tab-card-personal">
+          <div class="service-card-icon">🃏</div>
+          <div class="service-card-name lang-ar">بطاقة — شخصية</div>
+          <div class="service-card-name lang-en">Card — Personal</div>
+          <div class="service-card-price" id="price-card-personal">يبدأ من 149 SAR</div>
+          <div class="service-card-badge lang-ar">جديد 🆕</div>
+          <div class="service-card-badge lang-en">New 🆕</div>
+        </div>
+        <div class="service-card" onclick="selectService('card-brand')" id="tab-card-brand">
+          <div class="service-card-icon">🏢</div>
+          <div class="service-card-name lang-ar">بطاقة — شركة أو مشروع</div>
+          <div class="service-card-name lang-en">Card — Company / Brand</div>
+          <div class="service-card-price" id="price-card-brand">يبدأ من 1,000 SAR</div>
+          <div class="service-card-badge lang-ar">احترافي</div>
+          <div class="service-card-badge lang-en">Professional</div>
+        </div>
+      </div>
+      <div class="slider-arrows">
+        <div class="slider-arrow" onclick="slideTrack(-1)">‹</div>
+        <div class="slider-arrow" onclick="slideTrack(1)">›</div>
+      </div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="form-card" id="step1">
+      <div class="form-title">
+        <span class="lang-ar">📋 تفاصيل طلبك</span>
+        <span class="lang-en">📋 Order Details</span>
+      </div>
+
+      <!-- PRICE SUMMARY -->
+      <div class="price-summary">
+        <div>
+          <div class="price-label">
+            <span class="lang-ar">المبلغ الإجمالي</span>
+            <span class="lang-en">Total Amount</span>
+          </div>
+          <div class="price-currency" id="priceCurrLabel">ريال سعودي</div>
+        </div>
+        <div style="text-align:left">
+          <div class="price-amount" id="priceDisplay">149</div>
+          <div style="font-size:10px;color:var(--text-3);margin-top:2px">
+            <span class="lang-ar">دفع كامل عند التأكيد</span>
+            <span class="lang-en">Full payment upon confirmation</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>
+          <span class="lang-ar">ملاحظات أو طلبات إضافية (اختياري)</span>
+          <span class="lang-en">Additional Notes (optional)</span>
+        </label>
+        <textarea id="specialNotes" placeholder="أضف أي تفاصيل تودّ إيصالها..."></textarea>
+      </div>
+
+      <div class="step-nav">
+        <span></span>
+        <button class="btn-next" onclick="goStep(2)">
+          <span class="lang-ar">التالي — بياناتك ←</span>
+          <span class="lang-en">Next — Your Info →</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 2: INFO -->
+    <div class="form-card" id="step2" style="display:none">
+      <div class="form-title">
+        <span class="lang-ar">📋 بياناتك</span>
+        <span class="lang-en">📋 Your Information</span>
+      </div>
+
+      <!-- CV FIELDS -->
+      <div class="form-section active" id="fields-cv">
+        <div class="row2">
+          <div class="field"><label><span class="lang-ar">الاسم الكامل بالعربي *</span><span class="lang-en">Full Name in Arabic *</span></label><input id="cv-nameAr" placeholder="الاسم الكامل بالعربي"></div>
+          <div class="field"><label><span class="lang-ar">الاسم الكامل بالإنجليزية *</span><span class="lang-en">Full Name in English *</span></label><input id="cv-nameEn" placeholder="Full Name in English" dir="ltr"></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label><span class="lang-ar">المسمى الوظيفي *</span><span class="lang-en">Job Title *</span></label><input id="cv-title" placeholder="مطوّر برمجيات · محاسب · مصمم جرافيك"></div>
+          <div class="field"><label><span class="lang-ar">المدينة *</span><span class="lang-en">City *</span></label>
+            <select id="cv-city">
+              <option value="" id="city-default">اختر المدينة</option>
+              <option value="الرياض">Riyadh / الرياض</option>
+              <option value="جدة">Jeddah / جدة</option>
+              <option value="الدمام">Dammam / الدمام</option>
+              <option value="الخبر">Khobar / الخبر</option>
+              <option value="أبوظبي">Abu Dhabi / أبوظبي</option>
+              <option value="دبي">Dubai / دبي</option>
+              <option value="الكويت">Kuwait / الكويت</option>
+              <option value="الدوحة">Doha / الدوحة</option>
+              <option value="أخرى">Other / أخرى</option>
+            </select>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field"><label><span class="lang-ar">رقم الجوال (واتساب) *</span><span class="lang-en">Phone Number (WhatsApp) *</span></label><input id="cv-phone" type="tel" placeholder="+966 5X XXX XXXX" dir="ltr"></div>
+          <div class="field"><label><span class="lang-ar">البريد الإلكتروني *</span><span class="lang-en">Email Address *</span></label><input id="cv-email" type="email" placeholder="your@email.com" dir="ltr"></div>
+        </div>
+        <div class="field"><label><span class="lang-ar">النبذة التعريفية *</span><span class="lang-en">Bio *</span></label><textarea id="cv-bio" placeholder="اكتب نبذة مختصرة عن نفسك وتخصصك وما تقدمه..."></textarea></div>
+        <div class="field">
+          <label><span class="lang-ar">المهارات</span><span class="lang-en">Skills</span></label>
+          <div class="tags-wrap" id="cv-skills-wrap" onclick="document.getElementById('cv-skill-input').focus()">
+            <input class="tag-input" id="cv-skill-input" placeholder="أضف مهاراتك هنا...">
+          </div>
+        </div>
+        <div class="field"><label><span class="lang-ar">الإنجازات</span><span class="lang-en">Achievements</span></label><textarea id="cv-achievements" placeholder="اذكر أبرز إنجازاتك المهنية..."></textarea></div>
+        <div class="field"><label><span class="lang-ar">الشهادات والدورات *</span><span class="lang-en">Qualifications *</span></label>
+          <select id="cv-certs">
+            <option value="" id="cert-default">اختر المؤهل</option>
+            <option value="ابتدائي">Primary / ابتدائي</option>
+            <option value="متوسط">Middle School / متوسط</option>
+            <option value="ثانوي">High School / ثانوي</option>
+            <option value="جامعي">Bachelor's / جامعي</option>
+            <option value="ماجستير">Master's / ماجستير</option>
+            <option value="دكتوراه">PhD / دكتوراه</option>
+            <option value="شهادة مهنية">Professional Certificate / شهادة مهنية</option>
+            <option value="دبلوم">Diploma / دبلوم</option>
+          </select>
+        </div>
+        <div class="field" id="cert-details-wrap">
+          <label><span class="lang-ar">تفاصيل الشهادة *</span><span class="lang-en">Certificate Details *</span></label>
+          <textarea id="cv-cert-details" placeholder="اسم الشهادة · الجهة المانحة · السنة"></textarea>
+        </div>
+        <div style="background:var(--bg-3);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px">
+          <div style="font-size:12px;font-weight:600;color:var(--text-2);margin-bottom:10px">
+            <span class="lang-ar">🔗 حسابات التواصل المهني</span>
+            <span class="lang-en">🔗 Professional Accounts</span>
+          </div>
+          <div class="row2">
+            <div class="field"><label>LinkedIn</label><input id="cv-li" placeholder="linkedin.com/in/username" dir="ltr"></div>
+            <div class="field"><label>GitHub <span style="font-size:10px;color:var(--text-3)"><span class="lang-ar">(للمجال التقني)</span><span class="lang-en">(Tech field)</span></span></label><input id="cv-gh" placeholder="github.com/username" dir="ltr"></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label>Behance <span style="font-size:10px;color:var(--text-3)"><span class="lang-ar">(للمصممين)</span><span class="lang-en">(Designers)</span></span></label><input id="cv-be" placeholder="behance.net/username" dir="ltr"></div>
+            <div class="field"><label>X / Twitter</label><input id="cv-tw" placeholder="@username" dir="ltr"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MENU FIELDS -->
+      <div class="form-section" id="fields-menu">
+        <div class="row2">
+          <div class="field"><label><span class="lang-ar">اسم المنشأة بالعربية *</span><span class="lang-en">Business Name in Arabic *</span></label><input id="menu-nameAr" placeholder="اسم المنشأة بالعربية"></div>
+          <div class="field"><label><span class="lang-ar">اسم المنشأة بالإنجليزية *</span><span class="lang-en">Business Name in English *</span></label><input id="menu-nameEn" placeholder="Establishment Name in English" dir="ltr"></div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label><span class="lang-ar">نوع المنشأة *</span><span class="lang-en">Business Type *</span></label>
+            <select id="menu-type" onchange="handleMenuType(this.value)">
+              <option value="" id="menu-type-default">اختر نوع المنشأة</option>
+              <option value="مطعم">🍽️ Restaurant / مطعم</option>
+              <option value="كوفي">☕ Café / كوفي</option>
+              <option value="صالون">💇 Salon / صالون</option>
+              <option value="other">✏️ Other / أخرى</option>
+            </select>
+          </div>
+          <div class="field"><label><span class="lang-ar">المدينة</span><span class="lang-en">City</span></label><input id="menu-city" placeholder="الرياض · دبي · الكويت..."></div>
+        </div>
+        <div class="field" id="menu-type-other-wrap" style="display:none">
+          <label><span class="lang-ar">وصف نوع المنشأة *</span><span class="lang-en">Describe Your Business *</span></label>
+          <input id="menu-type-other" placeholder="مثال: مخبز، محل عطور، بوتيك...">
+        </div>
+        <div class="field"><label><span class="lang-ar">رقم الجوال (واتساب) *</span><span class="lang-en">Phone Number (WhatsApp) *</span></label><input id="menu-phone" type="tel" placeholder="+966 5X XXX XXXX" dir="ltr"></div>
+        <div class="field"><label><span class="lang-ar">وصف المنشأة</span><span class="lang-en">Business Description</span></label><textarea id="menu-desc" placeholder="اكتب نبذة مختصرة عن منشأتك وما يميزها..."></textarea></div>
+        <div class="field"><label><span class="lang-ar">أقسام القائمة</span><span class="lang-en">Menu Sections</span></label>
+          <div class="tags-wrap" id="menu-cats-wrap" onclick="document.getElementById('menu-cat-input').focus()">
+            <input class="tag-input" id="menu-cat-input" placeholder="اكتب القسم ثم اضغط Enter للإضافة">
+          </div>
+        </div>
+        <div class="field"><label><span class="lang-ar">حسابات التواصل الاجتماعي</span><span class="lang-en">Social Media Accounts</span></label><input id="menu-social" placeholder="@username" dir="ltr"></div>
+      </div>
+
+      <!-- CARD FIELDS -->
+      <div class="form-section" id="fields-card">
+        <div class="row2">
+          <div class="field"><label><span class="lang-ar">الاسم الكامل بالعربية *</span><span class="lang-en">Full Name in Arabic *</span></label><input id="card-nameAr" placeholder="الاسم الكامل بالعربية"></div>
+          <div class="field"><label><span class="lang-ar">الاسم الكامل بالإنجليزية *</span><span class="lang-en">Full Name in English *</span></label><input id="card-nameEn" placeholder="Full Name in English" dir="ltr"></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label><span class="lang-ar">اسم الشركة بالعربية *</span><span class="lang-en">Company Name in Arabic *</span></label><input id="card-companyAr" placeholder="اسم الشركة أو المشروع"></div>
+          <div class="field"><label><span class="lang-ar">اسم الشركة بالإنجليزية *</span><span class="lang-en">Company Name in English *</span></label><input id="card-companyEn" placeholder="Company Name in English" dir="ltr"></div>
+        </div>
+        <div class="field"><label><span class="lang-ar">المسمى الوظيفي *</span><span class="lang-en">Job Title *</span></label><input id="card-title" placeholder="المسمى الوظيفي"></div>
+        <div class="row2">
+          <div class="field"><label><span class="lang-ar">رقم الجوال *</span><span class="lang-en">Phone Number *</span></label><input id="card-phone" type="tel" placeholder="+966 5X XXX XXXX" dir="ltr"></div>
+          <div class="field"><label><span class="lang-ar">البريد الإلكتروني</span><span class="lang-en">Email Address</span></label><input id="card-email" type="email" placeholder="your@email.com" dir="ltr"></div>
+        </div>
+        <div class="field"><label><span class="lang-ar">الدومين الحالي للشركة (إن وُجد)</span><span class="lang-en">Current Domain (if any)</span></label><input id="card-domain" placeholder="www.company.com" dir="ltr"></div>
+        <div class="field"><label><span class="lang-ar">الموقع الإلكتروني</span><span class="lang-en">Website</span></label><input id="card-web" placeholder="www.company.com" dir="ltr"></div>
+        <div class="field"><label><span class="lang-ar">حسابات التواصل الاجتماعي</span><span class="lang-en">Social Media Accounts</span></label><input id="card-social" placeholder="LinkedIn · Instagram · X" dir="ltr"></div>
+        <div class="field"><label><span class="lang-ar">رابط الشعار أو الصورة (اختياري)</span><span class="lang-en">Logo / Image URL (optional)</span></label><input id="card-logo" placeholder="https://..." dir="ltr"></div>
+      </div>
+
+      <div class="step-nav">
+        <button class="btn-back" onclick="goStep(1)">
+          <span class="lang-ar">→ السابق</span>
+          <span class="lang-en">← Back</span>
+        </button>
+        <button class="btn-next" onclick="goStep(3)">
+          <span class="lang-ar">التالي — التفضيلات ←</span>
+          <span class="lang-en">Next — Preferences →</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 3: PREFERENCES -->
+    <div class="form-card" id="step3" style="display:none">
+      <div class="form-title">
+        <span class="lang-ar">⚙️ التفضيلات النهائية</span>
+        <span class="lang-en">⚙️ Final Preferences</span>
+      </div>
+      <div class="field">
+        <label><span class="lang-ar">اللغة الافتراضية للموقع</span><span class="lang-en">Default Website Language</span></label>
+        <select id="pref-lang">
+          <option value="ar" data-ar="العربية أولاً" data-en="Arabic First">العربية أولاً</option>
+          <option value="en" data-ar="الإنجليزية أولاً" data-en="English First">الإنجليزية أولاً</option>
+          <option value="both" data-ar="ثنائي اللغة" data-en="Bilingual">ثنائي اللغة</option>
+        </select>
+      </div>
+      <div class="field">
+        <label><span class="lang-ar">طريقة الدفع المفضّلة</span><span class="lang-en">Preferred Payment Method</span></label>
+        <select id="pref-pay">
+          <option data-ar="دفع كامل" data-en="Full Payment">دفع كامل</option>
+        </select>
+      </div>
+
+      <!-- FINAL PRICE -->
+      <div class="price-summary" style="margin-top:1rem">
+        <div>
+          <div class="price-label">
+            <span class="lang-ar">المبلغ الإجمالي</span>
+            <span class="lang-en">Total Amount</span>
+          </div>
+          <div class="price-currency" id="priceCurrLabel2">ريال سعودي</div>
+        </div>
+        <div style="text-align:left">
+          <div class="price-amount" id="priceDisplay2">149</div>
+        </div>
+      </div>
+
+      <div class="step-nav">
+        <button class="btn-back" onclick="goStep(2)">
+          <span class="lang-ar">→ السابق</span>
+          <span class="lang-en">← Back</span>
+        </button>
+        <button class="btn-submit" onclick="submitForm()">
+          <span class="lang-ar">إرسال الطلب ✓</span>
+          <span class="lang-en">Submit Order ✓</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUCCESS -->
+  <div class="success-screen" id="successScreen">
+    <div class="success-icon">✓</div>
+    <h2 class="success-title">
+      <span class="lang-ar">وصل طلبك! 🎉</span>
+      <span class="lang-en">Order Received! 🎉</span>
+    </h2>
+    <p class="success-sub">
+      <span class="lang-ar">شكراً لك — سنتواصل معك عبر واتساب خلال ساعتين لإرسال تفاصيل الدفع.<br><br>
+      <strong style="color:var(--accent)">⚠️ تنبيه مهم:</strong> لا يبدأ العمل على موقعك إلا بعد إتمام الدفع الكامل. وسيكون موقعك جاهزاً خلال يومين إلى ثلاثة أيام من تأكيد الدفع.</span>
+      <span class="lang-en">Thank you — we'll contact you via WhatsApp within 2 hours with payment details.<br><br>
+      <strong style="color:var(--accent)">⚠️ Important:</strong> Work on your site will not begin until full payment is completed. Your site will be ready within 2–3 business days from payment confirmation.</span>
+    </p>
+    <div class="success-ref" id="refNum"></div>
+  </div>
+
+</div>
+
+<script>
+// ===== STATE =====
+let currentService = 'cv-basic';
+let currentIdentity = 'standard';
+let currentStep = 1;
+let currentCurrency = 'SAR';
+let currentRate = 1;
+let currentCurrLabel = 'ريال سعودي';
+const cvSkills = [], menuCats = [];
+
+const prices = {
+  'cv-basic':      { standard: 149,   custom: 200  },
+  'cv-pro':        { standard: 590,   custom: 800  },
+  'menu':          { standard: 999,   custom: 1200 },
+  'card-personal': { standard: 149,   custom: 200  },
+  'card-brand':    { standard: 1000,  custom: 1500 }
+};
+
+const basePricesDisplay = {
+  'cv-basic': 149, 'cv-pro': 590, 'menu': 999, 'card-personal': 149, 'card-brand': 1000
+};
+
+const currLabels = {
+  SAR:'ريال سعودي', AED:'درهم إماراتي', KWD:'دينار كويتي',
+  QAR:'ريال قطري', BHD:'دينار بحريني', OMR:'ريال عماني'
+};
+const currLabelsEn = {
+  SAR:'Saudi Riyal', AED:'UAE Dirham', KWD:'Kuwaiti Dinar',
+  QAR:'Qatari Riyal', BHD:'Bahraini Dinar', OMR:'Omani Riyal'
+};
+
+// ===== LANG =====
+function toggleFormLang(){
+  const body = document.body;
+  const btn = document.getElementById('langToggleBtn');
+  body.classList.toggle('en');
+  const isEn = body.classList.contains('en');
+  body.setAttribute('dir', isEn ? 'ltr' : 'rtl');
+  btn.textContent = isEn ? 'ع' : 'EN';
+
+  const ph = isEn ? {
+    'cv-nameAr':      'Full Name in Arabic',
+    'cv-nameEn':      'Full Name in English',
+    'cv-title':       'Software Developer · Accountant · Designer',
+    'cv-phone':       '+966 5X XXX XXXX',
+    'cv-email':       'your@email.com',
+    'cv-bio':         'Write a brief bio about yourself and your specialty...',
+    'cv-skill-input': 'Add your skills here...',
+    'cv-achievements':'List your key achievements...',
+    'cv-cert-details':'Certificate name · Issuing body · Year',
+    'cv-li':          'linkedin.com/in/username',
+    'cv-gh':          'github.com/username',
+    'cv-be':          'behance.net/username',
+    'cv-tw':          '@username',
+    'menu-nameAr':    'Business Name in Arabic',
+    'menu-nameEn':    'Business Name in English',
+    'menu-city':      'Riyadh · Dubai · Kuwait...',
+    'menu-type-other':'e.g. Bakery, Perfume shop, Boutique...',
+    'menu-phone':     '+966 5X XXX XXXX',
+    'menu-desc':      'Write a brief description of your business...',
+    'menu-cat-input': 'Type a section then press Enter to add',
+    'menu-social':    '@username',
+    'card-nameAr':    'Full Name in Arabic',
+    'card-nameEn':    'Full Name in English',
+    'card-companyAr': 'Company or Project Name in Arabic',
+    'card-companyEn': 'Company Name in English',
+    'card-title':     'Job Title',
+    'card-phone':     '+966 5X XXX XXXX',
+    'card-email':     'your@email.com',
+    'card-domain':    'www.company.com',
+    'card-web':       'www.company.com',
+    'card-social':    'LinkedIn · Instagram · X',
+    'card-logo':      'https://...',
+    'specialNotes':   'Add any details you\'d like to share...',
+  } : {
+    'cv-nameAr':      'الاسم الكامل بالعربي',
+    'cv-nameEn':      'Full Name in English',
+    'cv-title':       'مطوّر برمجيات · محاسب · مصمم جرافيك',
+    'cv-phone':       '+966 5X XXX XXXX',
+    'cv-email':       'your@email.com',
+    'cv-bio':         'اكتب نبذة مختصرة عن نفسك وتخصصك وما تقدمه...',
+    'cv-skill-input': 'أضف مهاراتك هنا...',
+    'cv-achievements':'اذكر أبرز إنجازاتك المهنية...',
+    'cv-cert-details':'اسم الشهادة · الجهة المانحة · السنة',
+    'cv-li':          'linkedin.com/in/username',
+    'cv-gh':          'github.com/username',
+    'cv-be':          'behance.net/username',
+    'cv-tw':          '@username',
+    'menu-nameAr':    'اسم المنشأة بالعربية',
+    'menu-nameEn':    'Establishment Name in English',
+    'menu-city':      'الرياض · دبي · الكويت...',
+    'menu-type-other':'مثال: مخبز، محل عطور، بوتيك...',
+    'menu-phone':     '+966 5X XXX XXXX',
+    'menu-desc':      'اكتب نبذة مختصرة عن منشأتك وما يميزها...',
+    'menu-cat-input': 'اكتب القسم ثم اضغط Enter للإضافة',
+    'menu-social':    '@username',
+    'card-nameAr':    'الاسم الكامل بالعربية',
+    'card-nameEn':    'Full Name in English',
+    'card-companyAr': 'اسم الشركة أو المشروع',
+    'card-companyEn': 'Company Name in English',
+    'card-title':     'المسمى الوظيفي',
+    'card-phone':     '+966 5X XXX XXXX',
+    'card-email':     'your@email.com',
+    'card-domain':    'www.company.com',
+    'card-web':       'www.company.com',
+    'card-social':    'LinkedIn · Instagram · X',
+    'card-logo':      'https://...',
+    'specialNotes':   'أضف أي تفاصيل تودّ إيصالها...',
+  };
+
+  Object.entries(ph).forEach(([id, text]) => {
+    const el = document.getElementById(id);
+    if(el) el.placeholder = text;
+  });
+  // update select defaults
+  const certDefault = document.getElementById('cert-default');
+  if(certDefault) certDefault.textContent = isEn ? 'Select Qualification' : 'اختر المؤهل';
+  const cityDefault = document.getElementById('city-default');
+  if(cityDefault) cityDefault.textContent = isEn ? 'Select City' : 'اختر المدينة';
+  const menuTypeDefault = document.getElementById('menu-type-default');
+  if(menuTypeDefault) menuTypeDefault.textContent = isEn ? 'Select Business Type' : 'اختر نوع المنشأة';
+  // update pref-lang and pref-pay options
+  document.querySelectorAll('#pref-lang option, #pref-pay option').forEach(opt => {
+    const txt = isEn ? opt.dataset.en : opt.dataset.ar;
+    if(txt) opt.textContent = txt;
+  });
+  updatePrices();
+}
+
+// ===== CURRENCY =====
+function toggleCurrency() {
+  document.getElementById('currDropdown').classList.toggle('open');
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('.currency-wrap')) document.getElementById('currDropdown').classList.remove('open');
+});
+function setCurrency(code, flag, rate) {
+  currentCurrency = code; currentRate = rate;
+  currentCurrLabel = document.body.classList.contains('en') ? currLabelsEn[code] : currLabels[code];
+  document.getElementById('currFlag').textContent = flag;
+  document.getElementById('currCode').textContent = code;
+  document.querySelectorAll('.currency-option').forEach(o => o.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('currDropdown').classList.remove('open');
+  updatePrices();
+}
+
+
+function updatePrices() {
+  const ids = ['cv-basic','cv-pro','menu','card-personal','card-brand'];
+  const fromText = document.body.classList.contains('en') ? 'From' : 'يبدأ من';
+  ids.forEach(id => {
+    const el = document.getElementById('price-' + id);
+    if(el) el.textContent = `${fromText} ${conv(basePricesDisplay[id])} ${currentCurrency}`;
+  });
+  const base = prices[currentService];
+  if(base){
+    const finalPrice = conv(base.standard);
+    const el1 = document.getElementById('priceDisplay');
+    const el2 = document.getElementById('priceDisplay2');
+    const el3 = document.getElementById('priceCurrLabel');
+    const el4 = document.getElementById('priceCurrLabel2');
+    if(el1) el1.textContent = finalPrice;
+    if(el2) el2.textContent = finalPrice;
+    const isEn = document.body.classList.contains('en');
+    const label = isEn ? (currLabelsEn[currentCurrency] || currentCurrLabel) : currentCurrLabel;
+    if(el3) el3.textContent = label;
+    if(el4) el4.textContent = label;
+  }
+}
+
+function conv(sar){
+  const v = sar * currentRate;
+  return(currentCurrency==='KWD'||currentCurrency==='BHD'||currentCurrency==='OMR')?v.toFixed(2):Math.round(v);
+}
+
+// ===== MENU TYPE =====
+function handleMenuType(val) {
+  const wrap = document.getElementById('menu-type-other-wrap');
+  wrap.style.display = val === 'other' ? 'block' : 'none';
+  if(val !== 'other') document.getElementById('menu-type-other').value = '';
+}
+
+// ===== SERVICE =====
+const serviceNames = {
+  'cv-basic': 'سيرة — خريج جديد',
+  'cv-pro': 'سيرة — محترف',
+  'menu': 'قائمة — مطاعم وصالونات',
+  'card-personal': 'بطاقة — شخصية',
+  'card-brand': 'بطاقة — شركة أو مشروع'
+};
+
+function selectService(s) {
+  currentService = s;
+  document.querySelectorAll('.service-card').forEach(t => t.classList.remove('active'));
+  const tab = document.getElementById('tab-' + s);
+  if(tab) tab.classList.add('active');
+  // update badge
+  const badge = document.getElementById('selected-service-badge');
+  if(badge) badge.textContent = serviceNames[s] || s;
+  // map to form section
+  let section = 'cv';
+  if(s === 'menu') section = 'menu';
+  else if(s === 'card-personal' || s === 'card-brand') section = 'card';
+  document.querySelectorAll('.form-section').forEach(f => f.classList.remove('active'));
+  document.getElementById('fields-' + section).classList.add('active');
+  updatePrices();
+}
+
+// Slider arrows
+function slideTrack(dir) {
+  const track = document.getElementById('sliderTrack');
+  track.scrollBy({ left: dir * -220, behavior: 'smooth' });
+}
+
+// ===== IDENTITY =====
+function selectIdentity(type) {
+  currentIdentity = type;
+  document.getElementById('opt-standard').classList.toggle('active', type === 'standard');
+  document.getElementById('opt-custom').classList.toggle('active', type === 'custom');
+  document.getElementById('customColors').style.display = type === 'custom' ? 'block' : 'none';
+  updatePrices();
+}
+
+// ===== STEP NAV =====
+function goStep(n) {
+  // hide all steps
+  [1,2,3].forEach(i => {
+    const el = document.getElementById('step' + i);
+    if (el) el.style.display = 'none';
+  });
+  currentStep = n;
+  const target = document.getElementById('step' + n);
+  if (target) target.style.display = 'block';
+  document.getElementById('progressBar').style.width = (n / 3 * 100) + '%';
+  window.scrollTo({ top: 60, behavior: 'smooth' });
+}
+
+// ===== TAGS =====
+function initTags(inputId, wrapId, arr) {
+  document.getElementById(inputId).addEventListener('keydown', function(e) {
+    if ((e.key === 'Enter' || e.key === ',') && this.value.trim()) {
+      e.preventDefault();
+      if (!arr.includes(this.value.trim())) { arr.push(this.value.trim()); renderTags(wrapId, inputId, arr); }
+      this.value = '';
+    }
+  });
+}
+function renderTags(wrapId, inputId, arr) {
+  const wrap = document.getElementById(wrapId);
+  const input = document.getElementById(inputId);
+  wrap.innerHTML = '';
+  arr.forEach((t, i) => {
+    const tag = document.createElement('div');
+    tag.className = 'tag';
+    tag.innerHTML = t + `<button class="tag-remove" onclick="removeTag(${i},'${wrapId}','${inputId}',window._tags_${wrapId})">×</button>`;
+    wrap.appendChild(tag);
+  });
+  wrap.appendChild(input); input.focus();
+}
+window._tags_cvskills = cvSkills;
+window._tags_menucats = menuCats;
+initTags('cv-skill-input', 'cv-skills-wrap', cvSkills);
+initTags('menu-cat-input', 'menu-cats-wrap', menuCats);
+
+// ===== SWATCHES =====
+document.querySelectorAll('.swatch').forEach(s => {
+  s.addEventListener('click', function() {
+    document.querySelectorAll('.swatch').forEach(x => x.classList.remove('selected'));
+    this.classList.add('selected');
+  });
+});
+
+// ===== SUBMIT =====
+function submitForm() {
+  const nameAr = document.getElementById('cv-nameAr')?.value.trim() ||
+                 document.getElementById('menu-nameAr')?.value.trim() ||
+                 document.getElementById('card-nameAr')?.value.trim() || 'عميل';
+  const phone = document.getElementById('cv-phone')?.value.trim() ||
+                document.getElementById('menu-phone')?.value.trim() ||
+                document.getElementById('card-phone')?.value.trim() || '0000';
+  const last4 = phone.replace(/\D/g,'').slice(-4);
+  const firstName = nameAr.split(' ')[0];
+  const ref = `PG-${firstName}-${last4}`;
+  const isEn = document.body.classList.contains('en');
+  document.getElementById('refNum').textContent = (isEn ? 'Order #: ' : 'رقم الطلب: ') + ref;
+  document.getElementById('mainForm').style.display = 'none';
+  document.getElementById('successScreen').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// INIT
+updatePrices();
+</script>
+</body>
+</html>

@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pago — اجعل حضورك الرقمي يتحدث عنك</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#080808;--bg-2:#0F0F0F;--bg-3:#161616;
+  --accent:#d2ceed;--accent-2:#fcfcfe;
+  --chrome-1:#A78BFA;--chrome-2:#60A5FA;
+  --text:#F0F0F0;--text-2:#A0A0A0;--text-3:#555;
+  --border:rgba(255,255,255,0.06);--border-h:rgba(255,255,255,0.12);
+  --sans:'Inter',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.7;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+
+/* ===== HERO ===== */
+.dp-hero{position:relative;height:100vh;display:flex;flex-direction:column;overflow:hidden;background:#000;direction:ltr;font-family:var(--sans)}
+.dp-video-bg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.dp-video-bg-black{position:absolute;inset:0;background:#000;z-index:1}
+.dp-video-bg video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2}
+.dp-hero-inner{position:relative;z-index:10;display:flex;flex-direction:column;height:100%}
+
+/* NAV */
+.dp-nav-wrap{position:relative;z-index:20}
+.dp-nav{display:flex;align-items:center;justify-content:space-between;padding:clamp(12px, 3vh, 20px) clamp(16px, 4vw, 24px);max-width:80rem;margin:0 auto;width:100%}
+.dp-logo{display:flex;align-items:center;gap:12px}
+.dp-logo-ring{width:36px;height:36px;border-radius:50%;border:2px solid #A78BFA;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;overflow:hidden;background:rgba(167,139,250,0.08)}
+.dp-logo-pupil{width:14px;height:14px;border-radius:50%;background:#A78BFA;position:relative;animation:eye-move 4s ease-in-out infinite}
+@keyframes eye-move{
+  0%{transform:translate(0,0) scale(1)}
+  15%{transform:translate(4px,-2px) scale(0.95)}
+  30%{transform:translate(-3px,3px) scale(1)}
+  45%{transform:translate(3px,3px) scale(0.95)}
+  60%{transform:translate(-4px,-2px) scale(1)}
+  75%{transform:translate(0,0) scale(0.3)}
+  80%{transform:translate(0,0) scale(1)}
+  100%{transform:translate(0,0) scale(1)}
+}
+.dp-logo-text{color:#A78BFA;font-size:14px;font-weight:600;letter-spacing:0.02em}
+.dp-links-pill{display:none;align-items:center;border:1px solid #374151;border-radius:9999px;padding:0 4px}
+.dp-links-pill a{padding:8px 16px;font-size:14px;color:rgba(255,255,255,0.8);white-space:nowrap;transition:color .2s;display:inline-flex;align-items:center;gap:6px}
+.dp-links-pill a:hover{color:#fff}
+.dp-hamburger{display:flex;background:none;border:none;cursor:pointer;color:rgba(255,255,255,0.8);padding:4px;transition:color .2s}
+.dp-hamburger:hover{color:#fff}
+
+/* NAV RIGHT */
+.dp-nav-right{display:none;align-items:center;gap:8px}
+.dp-lang-btn{background:none;border:1px solid rgba(255,255,255,0.2);border-radius:6px;padding:5px 12px;font-size:12px;color:rgba(255,255,255,0.7);cursor:pointer;font-family:var(--sans);transition:all .2s}
+.dp-lang-btn:hover{border-color:rgba(255,255,255,0.5);color:#fff}
+
+/* CURRENCY */
+.currency-wrap{position:relative}
+.currency-btn{display:flex;align-items:center;gap:5px;background:none;border:1px solid rgba(255,255,255,0.2);border-radius:6px;padding:5px 10px;font-size:12px;color:rgba(255,255,255,0.7);cursor:pointer;font-family:var(--sans);transition:all .2s;white-space:nowrap}
+.currency-btn:hover{border-color:rgba(255,255,255,0.5);color:#fff}
+.currency-dropdown{position:absolute;top:calc(100% + 6px);left:0;background:#111;border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:6px;min-width:190px;display:none;z-index:200;box-shadow:0 8px 32px rgba(0,0,0,0.7)}
+.currency-dropdown.open{display:block}
+.currency-option{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:6px;font-size:12px;color:rgba(255,255,255,0.6);cursor:pointer;transition:background .15s}
+.currency-option:hover{background:rgba(255,255,255,0.06);color:#fff}
+.currency-option.active{color:var(--accent)}
+
+.dp-nav-cta{background:#fff;color:#000;padding:8px 18px;border-radius:9999px;font-size:13px;font-weight:600;font-family:var(--sans);border:none;cursor:pointer;transition:all .2s;white-space:nowrap}
+.dp-nav-cta:hover{background:rgba(255,255,255,0.85)}
+
+/* MOBILE MENU */
+.dp-mobile-menu{display:none;position:fixed;inset:0;z-index:50;background:rgba(0,0,0,0.95);backdrop-filter:blur(8px);flex-direction:column;align-items:center;justify-content:center;gap:32px}
+.dp-mobile-menu.open{display:flex}
+.dp-mobile-menu a{font-size:24px;color:rgba(255,255,255,0.8);transition:color .2s;display:inline-flex;align-items:center;gap:8px}
+.dp-mobile-menu a:hover{color:#fff}
+.dp-close-btn{position:absolute;top:24px;right:24px;background:none;border:none;cursor:pointer;color:rgba(255,255,255,0.8);transition:color .2s}
+.dp-close-btn:hover{color:#fff}
+
+.dp-mobile-tools {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 24px;
+  width: 100%;
+  padding: 0 24px;
+}
+
+.dp-mobile-tools .currency-btn,
+.dp-mobile-tools .dp-lang-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--sans);
+}
+
+.dp-mobile-tools .currency-btn:hover,
+.dp-mobile-tools .dp-lang-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Mobile currency dropdown */
+.mobile-currency-dropdown{position:fixed;bottom:0;left:0;right:0;background:#111;border-top:1px solid rgba(255,255,255,0.12);border-radius:16px 16px 0 0;padding:16px;z-index:100;display:none;flex-direction:column;gap:4px}
+.mobile-currency-dropdown.open{display:flex}
+.mobile-curr-handle{width:40px;height:4px;background:rgba(255,255,255,0.2);border-radius:2px;margin:0 auto 12px}
+
+/* MAIN CONTENT */
+.dp-main{flex:1;display:flex;flex-direction:column;max-width:80rem;margin:0 auto;width:100%;padding:0 24px}
+.dp-top{display:flex;flex-direction:column;gap:16px;padding-top:32px}
+.dp-stat{color:rgba(255,255,255,0.8);font-size:14px;font-weight:500}
+
+/* ===== CENTER ===== */
+.dp-center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding-bottom:64px}
+.dp-label{text-transform:uppercase;color:rgba(255,255,255,0.8);font-size:11px;letter-spacing:-.01em;margin-bottom:24px}
+
+.dp-h1{font-size:clamp(2.2rem, 6vw, 3.5rem);font-weight:500;line-height:1.4;letter-spacing:-.03em;width:100%;text-align:center;overflow:hidden;direction:rtl}
+.dp-become{display:block;color:#fff;text-align:center;padding:0 clamp(0.5rem,2vw,1rem)}
+.dp-leader{display:block;text-align:center}
+
+/* SUBTITLE */
+.dp-hero-subtitle{font-size:clamp(.95rem,1.8vw,1.2rem);color:rgba(255,255,255,0.82);line-height:1.8;max-width:640px;width:90%;text-align:center;margin:1.6rem auto 2rem;font-weight:400;direction:rtl;display:block;padding:0 1rem}
+.dp-hero-subtitle.en-sub{direction:ltr;display:none}
+body.en .dp-hero-subtitle:not(.en-sub){display:none}
+body.en .dp-hero-subtitle.en-sub{display:block}
+
+/* SHINY */
+@keyframes shine-sweep{0%{background-position:0% center}100%{background-position:200% center}}
+.shiny-text{background-image:linear-gradient(100deg,#64CEFB 0%,#64CEFB 35%,#ffffff 50%,#64CEFB 65%,#64CEFB 100%);background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;display:inline-block;animation:shine-sweep 3s linear infinite}
+
+/* CTA BTN */
+.dp-cta-btn{margin-top:15px;display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:9999px;background:#000;color:#fff;padding:14px 28px;font-size:14px;font-weight:500;font-family:var(--sans);border:1px solid rgba(255,255,255,0.2);cursor:pointer;transition:background .2s, transform .2s}
+.dp-cta-btn:hover{background:#111827}
+.dp-btn-arrow{display:inline-flex;transition:transform .2s}
+.dp-cta-btn:hover .dp-btn-arrow{transform:translateX(4px)}
+
+/* RESPONSIVE HERO */
+@media(min-width:640px){.dp-h1{font-size:clamp(3rem,8vw,3.75rem)}.dp-label{font-size:12px}}
+@media(min-width:768px){.dp-h1{font-size:clamp(3.5rem,7vw,4.5rem)}.dp-cta-btn{padding:16px 32px}}
+@media(min-width:1024px){.dp-links-pill{display:flex}.dp-hamburger{display:none}.dp-nav-right{display:flex}.dp-top{flex-direction:row;justify-content:space-between;align-items:flex-start}.dp-stat{text-align:right;font-size:16px}.dp-label{font-size:14px}.dp-h1{font-size:clamp(3rem,7vw,6rem)}}
+@media(min-width:1280px){.dp-h1{font-size:clamp(4rem,8vw,7.5rem)}}
+
+/* ===== TRUST BADGE ===== */
+.trust-bar{background:rgba(124,107,240,0.07);border-top:1px solid rgba(124,107,240,0.15);border-bottom:1px solid rgba(124,107,240,0.15);padding:.85rem clamp(1.5rem,5vw,4rem)}
+.trust-bar-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;text-align:center}
+.trust-verified{font-size:13px;color:var(--accent);font-weight:600}
+.trust-sep{color:rgba(255,255,255,0.15);font-size:12px}
+.trust-info{font-size:11px;color:rgba(255,255,255,0.45)}
+
+/* ===== SECTIONS ===== */
+.section{padding:clamp(5rem,10vh,8rem) clamp(1.5rem,5vw,4rem)}
+.section-inner{max-width:1100px;margin:0 auto}
+.sec-eyebrow{font-size:11px;font-weight:500;letter-spacing:.12em;color:var(--accent);text-transform:uppercase;margin-bottom:8px}
+.sec-title{font-size:clamp(1.6rem,3.5vw,2.6rem);font-weight:700;letter-spacing:-.5px;margin-bottom:1rem}
+.sec-sub{font-size:15px;color:var(--text-2);max-width:500px;line-height:1.8}
+.text-center{text-align:center}
+.text-center .sec-sub{margin:0 auto}
+
+/* FEATURES */
+.features{background:var(--bg)}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:3.5rem}
+.feat-card{background:var(--bg-2);border:1px solid var(--border);border-radius:14px;padding:1.8rem;transition:border-color .2s,transform .2s}
+.feat-card:hover{border-color:rgba(124,107,240,0.3);transform:translateY(-3px)}
+.feat-icon{width:42px;height:42px;border-radius:10px;background:rgba(124,107,240,0.1);border:1px solid rgba(124,107,240,0.2);display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:1rem}
+.feat-title{font-size:15px;font-weight:600;margin-bottom:6px}
+.feat-desc{font-size:13px;color:var(--text-2);line-height:1.7}
+
+/* TEMPLATES */
+.templates{background:var(--bg-2)}
+.templates-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:3.5rem}
+.tmpl-card{background:var(--bg-3);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:border-color .25s,transform .25s}
+.tmpl-card:hover{border-color:rgba(124,107,240,0.35);transform:translateY(-4px)}
+.tmpl-thumb{height:150px;display:flex;align-items:center;justify-content:center;font-size:2.5rem;position:relative;overflow:hidden}
+.tmpl-thumb::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,var(--bg-3))}
+.tmpl-info{padding:1.2rem}
+.tmpl-name{font-size:14px;font-weight:600;margin-bottom:4px}
+.tmpl-desc{font-size:12px;color:var(--text-2);line-height:1.6}
+.tmpl-badge{display:inline-block;margin-top:8px;font-size:10px;font-weight:600;padding:3px 10px;border-radius:8px;background:rgba(124,107,240,0.12);color:var(--chrome-1)}
+.tmpl-price{font-size:11px;color:var(--accent);margin-top:5px;font-weight:600}
+
+/* EXPLAINER */
+.explainer{background:var(--bg-2)}
+.explainer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:3.5rem}
+.expl-card{background:var(--bg-3);border:1px solid var(--border);border-radius:14px;padding:1.8rem;transition:border-color .2s,transform .2s}
+.expl-card:hover{border-color:rgba(124,107,240,0.3);transform:translateY(-3px)}
+.expl-highlight{border-color:rgba(124,107,240,0.35);background:rgba(124,107,240,0.05)}
+.expl-icon{font-size:28px;margin-bottom:1rem}
+.expl-title{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+.expl-desc{font-size:13px;color:var(--text-2);line-height:1.8}
+.expl-desc strong{color:var(--accent);font-weight:600}
+
+/* PRICING */
+.pricing{background:var(--bg)}
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:3.5rem}
+.plan{background:var(--bg-2);border:1px solid var(--border);border-radius:16px;padding:2rem 1.6rem;position:relative;transition:border-color .2s}
+.plan:hover{border-color:var(--border-h)}
+.plan.featured{border-color:rgba(124,107,240,0.5)}
+.plan-badge{position:absolute;top:-11px;right:50%;transform:translateX(50%);background:var(--accent);color:#fff;font-size:10px;font-weight:700;padding:3px 14px;border-radius:10px;letter-spacing:.04em}
+.plan-name{font-size:12px;color:var(--text-2);margin-bottom:8px}
+.plan-price{font-size:2.4rem;font-weight:700;letter-spacing:-1px;background:linear-gradient(135deg,#fff,var(--chrome-1));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+.plan-currency{font-size:13px;color:var(--text-2);margin-bottom:1.4rem;margin-top:3px}
+.plan-features{list-style:none;font-size:13px;color:var(--text-2);display:flex;flex-direction:column;gap:8px;margin-bottom:1.8rem}
+.plan-features li{display:flex;align-items:center;gap:8px}
+.plan-features li::before{content:'✓';color:var(--accent);font-weight:700}
+.plan-btn{width:100%;padding:11px;border-radius:8px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;border:none;transition:all .2s}
+.plan-btn.solid{background:var(--accent);color:#fff}
+.plan-btn.solid:hover{background:var(--accent-2)}
+.plan-btn.outline{background:transparent;color:var(--text);border:1px solid var(--border-h)}
+.plan-btn.outline:hover{border-color:var(--accent);background:rgba(124,107,240,0.06)}
+
+/* CTA */
+.cta-section{background:var(--bg-2);padding:clamp(5rem,10vh,8rem) clamp(1.5rem,5vw,4rem);text-align:center;position:relative;overflow:hidden}
+.cta-section::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:500px;height:300px;border-radius:50%;background:radial-gradient(ellipse,rgba(124,107,240,0.12) 0%,transparent 70%);filter:blur(30px);pointer-events:none}
+.cta-section h2{font-size:clamp(1.8rem,4vw,3rem);font-weight:700;letter-spacing:-.5px;margin-bottom:1rem;position:relative}
+.cta-section p{font-size:15px;color:var(--text-2);margin-bottom:1rem;position:relative}
+.cta-phone{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;max-width:420px;margin:0 auto 1rem;position:relative}
+.cta-input{flex:1;min-width:200px;padding:12px 16px;background:rgba(255,255,255,0.04);border:1px solid var(--border-h);border-radius:8px;color:var(--text);font-size:14px;font-family:var(--sans);outline:none;transition:border-color .2s;direction:ltr}
+.cta-input::placeholder{color:var(--text-3)}
+.cta-input:focus{border-color:var(--accent)}
+.btn-cta{background:var(--accent);color:#fff;padding:12px 24px;border-radius:8px;font-size:14px;font-weight:600;font-family:var(--sans);border:none;cursor:pointer;transition:all .2s;white-space:nowrap}
+.btn-cta:hover{background:var(--accent-2);transform:translateY(-1px)}
+.cta-terms{font-size:11px;color:rgba(255,255,255,0.3);line-height:1.9;position:relative;max-width:560px;margin:0 auto}
+.cta-terms span{color:rgba(255,255,255,0.5)}
+
+/* CTA success message */
+.cta-success{display:none;align-items:center;justify-content:center;gap:10px;background:rgba(124,107,240,0.1);border:1px solid rgba(124,107,240,0.3);border-radius:10px;padding:14px 20px;margin:0 auto 1rem;max-width:420px;font-size:14px;color:var(--accent)}
+.cta-success.show{display:flex}
+
+/* CONTACT SECTION */
+.contact-strip{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;margin:1.2rem 0 0;position:relative}
+.contact-link{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:rgba(255,255,255,0.5);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:8px 14px;transition:all .2s}
+.contact-link:hover{color:#fff;border-color:rgba(255,255,255,0.3);background:rgba(255,255,255,0.04)}
+.contact-link svg{width:15px;height:15px;flex-shrink:0}
+
+/* FOOTER */
+footer{background:var(--bg);border-top:1px solid var(--border);padding:2rem clamp(1.5rem,5vw,4rem)}
+.footer-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.footer-logo{font-size:16px;font-weight:700;background:linear-gradient(135deg,#fff,var(--chrome-1));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.footer-text{font-size:11px;color:var(--text-3)}
+.footer-cert{font-size:11px;color:var(--text-3)}
+.footer-cert span{color:var(--accent)}
+.footer-links{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.footer-contact-link{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--text-3);transition:color .2s}
+.footer-contact-link:hover{color:var(--accent)}
+.footer-contact-link svg{width:13px;height:13px}
+
+/* LANG */
+.lang-ar{display:block}.lang-en{display:none}
+body.en .lang-ar{display:none}
+body.en .lang-en{display:block}
+body.en{direction:ltr}
+body.en .sec-sub{margin:0 auto}
+.dp-cta-btn.lang-ar{display:inline-flex}.dp-cta-btn.lang-en{display:none}
+body.en .dp-cta-btn.lang-ar{display:none}
+body.en .dp-cta-btn.lang-en{display:inline-flex}
+.dp-stat.lang-ar{display:block}
+.dp-label.lang-ar{display:block}
+.dp-become.lang-ar{display:block}
+.dp-leader.lang-ar{display:block}
+.dp-stat.lang-en{display:none}
+.dp-label.lang-en{display:none}
+.dp-become.lang-en{display:none}
+.dp-leader.lang-en{display:none}
+body.en .dp-stat.lang-ar{display:none}
+body.en .dp-label.lang-ar{display:none}
+body.en .dp-become.lang-ar{display:none}
+body.en .dp-leader.lang-ar{display:none}
+body.en .dp-stat.lang-en{display:block}
+body.en .dp-label.lang-en{display:block}
+body.en .dp-become.lang-en{display:block}
+body.en .dp-leader.lang-en{display:block}
+.dp-links-pill a.lang-ar{display:inline-flex}.dp-links-pill a.lang-en{display:none}
+body.en .dp-links-pill a.lang-ar{display:none}
+body.en .dp-links-pill a.lang-en{display:inline-flex}
+.dp-mobile-menu a.lang-ar{display:inline-flex}.dp-mobile-menu a.lang-en{display:none}
+body.en .dp-mobile-menu a.lang-ar{display:none}
+body.en .dp-mobile-menu a.lang-en{display:inline-flex}
+.dp-nav-cta.lang-ar{display:inline-block}.dp-nav-cta.lang-en{display:none}
+body.en .dp-nav-cta.lang-ar{display:none}
+body.en .dp-nav-cta.lang-en{display:inline-block}
+.trust-verified.lang-ar{display:inline}.trust-verified.lang-en{display:none}
+body.en .trust-verified.lang-ar{display:none}
+body.en .trust-verified.lang-en{display:inline}
+.contact-link.lang-ar{display:inline-flex}.contact-link.lang-en{display:none}
+body.en .contact-link.lang-ar{display:none}
+body.en .contact-link.lang-en{display:inline-flex}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+.reveal.visible{opacity:1;transform:none}
+
+@media(max-width:768px){
+  .footer-inner{flex-direction:column;text-align:center}
+  .footer-links{justify-content:center}
+  .dp-center * {line-height: 1.3 !important;}
+}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none}.shiny-text{animation:none;-webkit-text-fill-color:#64CEFB}}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="dp-hero">
+  <div class="dp-video-bg">
+    <div class="dp-video-bg-black"></div>
+    <video autoplay loop muted playsinline>
+      <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260328_105406_16f4600d-7a92-4292-b96e-b19156c7830a.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="dp-hero-inner">
+    <!-- NAV -->
+    <div class="dp-nav-wrap">
+      <nav class="dp-nav">
+        <div class="dp-logo">
+          <div class="dp-logo-ring">
+            <div class="dp-logo-pupil"></div>
+          </div>
+          <span class="dp-logo-text">Pago</span>
+        </div>
+        <div class="dp-links-pill">
+          <a href="#features" class="lang-ar">المميزات</a>
+          <a href="#features" class="lang-en">Features</a>
+          <a href="#templates" class="lang-ar">القوالب</a>
+          <a href="#templates" class="lang-en">Templates</a>
+          <a href="#pricing" class="lang-ar">الأسعار</a>
+          <a href="#pricing" class="lang-en">Pricing</a>
+          <a href="#explainer" class="lang-ar">ما ستحصل عليه</a>
+          <a href="#explainer" class="lang-en">What You Get</a>
+          <a href="#cta" class="lang-ar">تواصل معنا</a>
+          <a href="#cta" class="lang-en">Contact Us</a>
+        </div>
+        <div class="dp-nav-right">
+          <!-- CURRENCY -->
+          <div class="currency-wrap">
+            <button class="currency-btn" onclick="toggleCurrency()" id="currBtn">
+              <span id="currFlag">🇸🇦</span>
+              <span id="currCode">SAR</span> ▾
+            </button>
+            <div class="currency-dropdown" id="currDropdown">
+              <div class="currency-option active" onclick="setCurrency('SAR','🇸🇦',1,'ريال سعودي')">🇸🇦 SAR — ريال سعودي</div>
+              <div class="currency-option" onclick="setCurrency('AED','🇦🇪',0.98,'درهم إماراتي')">🇦🇪 AED — درهم إماراتي</div>
+              <div class="currency-option" onclick="setCurrency('KWD','🇰🇼',0.12,'دينار كويتي')">🇰🇼 KWD — دينار كويتي</div>
+              <div class="currency-option" onclick="setCurrency('QAR','🇶🇦',1.37,'ريال قطري')">🇶🇦 QAR — ريال قطري</div>
+              <div class="currency-option" onclick="setCurrency('BHD','🇧🇭',0.14,'دينار بحريني')">🇧🇭 BHD — دينار بحريني</div>
+              <div class="currency-option" onclick="setCurrency('OMR','🇴🇲',0.14,'ريال عماني')">🇴🇲 OMR — ريال عماني</div>
+            </div>
+          </div>
+          <button class="dp-lang-btn" onclick="toggleLang()" id="langBtn">EN</button>
+          <button class="dp-nav-cta lang-ar" onclick="window.location.href='pago-form.html'">ابدأ الآن</button>
+          <button class="dp-nav-cta lang-en" onclick="window.location.href='pago-form.html'">Get Started</button>
+        </div>
+        <button class="dp-hamburger" onclick="toggleDpMenu()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+        </button>
+      </nav>
+    </div>
+
+    <!-- MOBILE MENU -->
+    <div class="dp-mobile-menu" id="dpMobileMenu">
+      <button class="dp-close-btn" onclick="toggleDpMenu()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+      <a href="#features" class="lang-ar" onclick="toggleDpMenu()">المميزات</a>
+      <a href="#features" class="lang-en" onclick="toggleDpMenu()">Features</a>
+      <a href="#templates" class="lang-ar" onclick="toggleDpMenu()">القوالب</a>
+      <a href="#templates" class="lang-en" onclick="toggleDpMenu()">Templates</a>
+      <a href="#pricing" class="lang-ar" onclick="toggleDpMenu()">الأسعار</a>
+      <a href="#pricing" class="lang-en" onclick="toggleDpMenu()">Pricing</a>
+      <a href="#explainer" class="lang-ar" onclick="toggleDpMenu()">ما ستحصل عليه</a>
+      <a href="#explainer" class="lang-en" onclick="toggleDpMenu()">What You Get</a>
+      <a href="pago-form.html" class="lang-ar" onclick="toggleDpMenu()">تواصل معنا</a>
+      <a href="pago-form.html" class="lang-en" onclick="toggleDpMenu()">Contact Us</a>
+
+      <div class="dp-mobile-tools">
+        <div class="currency-wrap">
+          <button class="currency-btn" onclick="toggleMobileCurrencySheet()" id="currBtnMobile">
+            <span id="currFlagMobile">🇸🇦</span> <span id="currCodeMobile">SAR</span> ▾
+          </button>
+        </div>
+        <button class="dp-lang-btn" onclick="toggleLang()" id="langBtnMobile">EN</button>
+      </div>
+
+      <a href="pago-form.html" class="lang-ar" onclick="toggleDpMenu()">ابدأ الآن</a>
+      <a href="pago-form.html" class="lang-en" onclick="toggleDpMenu()">Get Started</a>
+    </div>
+
+    <!-- MOBILE CURRENCY SHEET -->
+    <div class="mobile-currency-dropdown" id="mobileCurrSheet">
+      <div class="mobile-curr-handle"></div>
+      <div class="currency-option active" onclick="setCurrencyMobile('SAR','🇸🇦',1)">🇸🇦 SAR — ريال سعودي</div>
+      <div class="currency-option" onclick="setCurrencyMobile('AED','🇦🇪',0.98)">🇦🇪 AED — درهم إماراتي</div>
+      <div class="currency-option" onclick="setCurrencyMobile('KWD','🇰🇼',0.12)">🇰🇼 KWD — دينار كويتي</div>
+      <div class="currency-option" onclick="setCurrencyMobile('QAR','🇶🇦',1.37)">🇶🇦 QAR — ريال قطري</div>
+      <div class="currency-option" onclick="setCurrencyMobile('BHD','🇧🇭',0.14)">🇧🇭 BHD — دينار بحريني</div>
+      <div class="currency-option" onclick="setCurrencyMobile('OMR','🇴🇲',0.14)">🇴🇲 OMR — ريال عماني</div>
+    </div>
+
+    <!-- MAIN -->
+    <div class="dp-main">
+      <div class="dp-top">
+        <p class="dp-stat lang-ar">متاح الآن في السعودية والخليج 🇸🇦</p>
+        <p class="dp-stat lang-en">Now available in Saudi Arabia & the Gulf 🇸🇦</p>
+      </div>
+      <div class="dp-center">
+        <p class="dp-label lang-ar">صفحتك الاحترافية — تسليم خلال يومَي عمل</p>
+        <p class="dp-label lang-en">Your professional page — delivered in 2 business days</p>
+        <h1 class="dp-h1">
+          <span class="dp-become lang-ar">صفحتك على الإنترنت</span>
+          <span class="dp-become lang-en">Your page online</span>
+          <span class="dp-leader shiny-text lang-ar">في دقائق</span>
+          <span class="dp-leader shiny-text lang-en">in minutes</span>
+        </h1>
+        <p class="dp-hero-subtitle lang-ar">اجعل حضورك الرقمي يتحدث عنك — سيرتك الذاتية وقائمتك وبطاقة أعمالك، كلها تستحق موقعاً إلكترونياً احترافياً برابط وباركود خاص بك.</p>
+        <p class="dp-hero-subtitle en-sub lang-en">Make your digital presence speak for you — your CV, menu, and business card all deserve a professional website with your own link and QR code.</p>
+        <button class="dp-cta-btn lang-ar" onclick="window.location.href='pago-form.html'">
+          ابدأ الآن <span class="dp-btn-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+        </button>
+        <button class="dp-cta-btn lang-en" onclick="window.location.href='pago-form.html'">
+          Start Now <span class="dp-btn-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-bar-inner">
+    <span class="trust-verified lang-ar">✓ موثّقة رسمياً</span>
+    <span class="trust-verified lang-en">✓ Officially Licensed</span>
+    <span class="trust-sep">·</span>
+    <span class="trust-info lang-ar">وزارة الموارد البشرية والتنمية الاجتماعية · FL-896217957 · نظم تقنية المعلومات</span>
+    <span class="trust-info lang-en">Ministry of Human Resources & Social Development · FL-896217957 · IT Systems</span>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="section features" id="features">
+  <div class="section-inner">
+    <div class="text-center reveal">
+      <p class="sec-eyebrow lang-ar">لماذا Pago</p>
+      <p class="sec-eyebrow lang-en">Why Pago</p>
+      <h2 class="sec-title lang-ar">كل ما تحتاجه في مكانٍ واحد</h2>
+      <h2 class="sec-title lang-en">Everything you need, in one place</h2>
+    </div>
+    <div class="features-grid reveal">
+      <div class="feat-card">
+        <div class="feat-icon">⚡</div>
+        <div class="feat-title lang-ar">تسليم خلال يومين إلى ثلاثة أيام</div>
+        <div class="feat-title lang-en">Delivered in 2–3 business days</div>
+        <div class="feat-desc lang-ar">عبّئ النموذج، ونتولى تصميم موقعك وتجهيزه بالكامل خلال يومين إلى ثلاثة أيام بحسب الباقة المختارة.</div>
+        <div class="feat-desc lang-en">Fill the form and we take care of everything — your site is fully designed and ready within 2–3 business days depending on your plan.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🔒</div>
+        <div class="feat-title lang-ar">استضافة آمنة لمدة شهر</div>
+        <div class="feat-title lang-en">Secure hosting for one month</div>
+        <div class="feat-desc lang-ar">يُستضاف موقعك بأمان وشهادة SSL لمدة شهر كامل من تاريخ التسليم، وقابلة للتجديد بعد ذلك.</div>
+        <div class="feat-desc lang-en">Your site is hosted securely with an SSL certificate for a full month from the delivery date, renewable afterwards.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🌐</div>
+        <div class="feat-title lang-ar">عربي وإنجليزي</div>
+        <div class="feat-title lang-en">Arabic + English</div>
+        <div class="feat-desc lang-ar">يدعم موقعك اللغتين العربية والإنجليزية مع إمكانية التبديل بينهما بسهولة، بما يلائم جميع الفئات والأسواق.</div>
+        <div class="feat-desc lang-en">Your site supports both Arabic and English with an easy toggle — suited for all audiences and Gulf markets.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">📲</div>
+        <div class="feat-title lang-ar">باركود QR مخصص</div>
+        <div class="feat-title lang-en">Custom QR Code</div>
+        <div class="feat-desc lang-ar">باركود خاص بك يمكن إضافته إلى سيرتك الذاتية الورقية أو بطاقة أعمالك.</div>
+        <div class="feat-desc lang-en">A personal QR code you can add to your printed CV or business card for instant access to your site.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">📱</div>
+        <div class="feat-title lang-ar">متجاوب بالكامل</div>
+        <div class="feat-title lang-en">Fully Responsive</div>
+        <div class="feat-desc lang-ar">يظهر موقعك بشكل مثالي على جميع الأجهزة: الجوال، الحاسوب اللوحي، والحاسب الشخصي.</div>
+        <div class="feat-desc lang-en">Your site looks perfect on all devices: mobile, tablet, and desktop — no compromises.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">✏️</div>
+        <div class="feat-title lang-ar">تعديل سهل</div>
+        <div class="feat-title lang-en">Easy Updates</div>
+        <div class="feat-desc lang-ar">في حال رغبتك بتحديث بياناتك، يسعدنا تنفيذ التعديل خلال ساعة واحدة.</div>
+        <div class="feat-desc lang-en">Want to update your info? We're happy to apply any changes within one hour.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEMPLATES -->
+<section class="section templates" id="templates">
+  <div class="section-inner">
+    <div class="text-center reveal">
+      <p class="sec-eyebrow lang-ar">القوالب</p>
+      <p class="sec-eyebrow lang-en">Templates</p>
+      <h2 class="sec-title lang-ar">لكل شيء صفحةٌ تليق به</h2>
+      <h2 class="sec-title lang-en">A page for everything</h2>
+      <p class="sec-sub lang-ar">ليست السيرة الذاتية وحدها — كل شيء تودّ عرضه يستحق موقعاً إلكترونياً احترافياً.</p>
+      <p class="sec-sub lang-en">Not just a CV — everything you want to showcase deserves a professional website.</p>
+    </div>
+    <div class="templates-grid reveal">
+      <div class="tmpl-card">
+        <div class="tmpl-thumb" style="background:linear-gradient(135deg,#0F1629,#1a1040)">🎓</div>
+        <div class="tmpl-info">
+          <div class="tmpl-name lang-ar">السيرة الذاتية — الخريج الجديد</div>
+          <div class="tmpl-name lang-en">CV — Fresh Graduate</div>
+          <div class="tmpl-desc lang-ar">مثالية لحديثي التخرج — تُبرز مؤهلاتك وطموحاتك بأسلوب عصري واحترافي.</div>
+          <div class="tmpl-desc lang-en">Perfect for fresh graduates — highlights your qualifications and ambitions professionally.</div>
+          <div class="tmpl-badge lang-ar">الأكثر طلباً</div>
+          <div class="tmpl-badge lang-en">Most Popular</div>
+          <div class="tmpl-price lang-ar">يبدأ من <span id="p-cv-basic">149</span> <span class="curr-label">SAR</span></div>
+          <div class="tmpl-price lang-en">From <span id="p-cv-basic-en">149</span> <span class="curr-label">SAR</span></div>
+        </div>
+      </div>
+      <div class="tmpl-card">
+        <div class="tmpl-thumb" style="background:linear-gradient(135deg,#1a1040,#2d1060)">💼</div>
+        <div class="tmpl-info">
+          <div class="tmpl-name lang-ar">السيرة الذاتية — المحترف ذو الخبرة</div>
+          <div class="tmpl-name lang-en">CV — Experienced Professional</div>
+          <div class="tmpl-desc lang-ar">للمحترفين ذوي الخبرة — يُبرز إنجازاتك ومشاريعك بمستوى رفيع يليق بمسيرتك المهنية.</div>
+          <div class="tmpl-desc lang-en">For experienced professionals — showcases your achievements at a level worthy of your career.</div>
+          <div class="tmpl-badge lang-ar">مميزة ⭐</div>
+          <div class="tmpl-badge lang-en">Premium ⭐</div>
+          <div class="tmpl-price lang-ar">يبدأ من <span id="p-cv-pro">590</span> <span class="curr-label">SAR</span></div>
+          <div class="tmpl-price lang-en">From <span id="p-cv-pro-en">590</span> <span class="curr-label">SAR</span></div>
+        </div>
+      </div>
+      <div class="tmpl-card">
+        <div class="tmpl-thumb" style="background:linear-gradient(135deg,#0a1f0a,#0f3020)">☕</div>
+        <div class="tmpl-info">
+          <div class="tmpl-name lang-ar">قائمة — مطاعم، كوفيهات، وصالونات</div>
+          <div class="tmpl-name lang-en">Menu — Restaurants, Cafés & Salons</div>
+          <div class="tmpl-desc lang-ar">صفحة احترافية لأي مكان تجاري — تعرض أسعارك، فروعك، وحساباتك على التواصل الاجتماعي في مكان واحد.</div>
+          <div class="tmpl-desc lang-en">A professional page for any business — showcasing your prices, branches, and social media accounts all in one place.</div>
+          <div class="tmpl-badge lang-ar">الأكثر تنوعاً</div>
+          <div class="tmpl-badge lang-en">Most Versatile</div>
+          <div class="tmpl-price lang-ar">يبدأ من <span id="p-menu">999</span> <span class="curr-label">SAR</span></div>
+          <div class="tmpl-price lang-en">From <span id="p-menu-en">999</span> <span class="curr-label">SAR</span></div>
+        </div>
+      </div>
+      <div class="tmpl-card">
+        <div class="tmpl-thumb" style="background:linear-gradient(135deg,#1a0a2e,#2d1060)">🃏</div>
+        <div class="tmpl-info">
+          <div class="tmpl-name lang-ar">بطاقة أعمال — شخصية</div>
+          <div class="tmpl-name lang-en">Business Card — Personal</div>
+          <div class="tmpl-desc lang-ar">هويتك الرقمية الشخصية — اسمك، تخصصك، وطرق التواصل في صفحة أنيقة قابلة للمشاركة فوراً.</div>
+          <div class="tmpl-desc lang-en">Your personal digital identity — name, specialty, and contact info in an elegant shareable page.</div>
+          <div class="tmpl-badge lang-ar">جديد 🆕</div>
+          <div class="tmpl-badge lang-en">New 🆕</div>
+          <div class="tmpl-price lang-ar">يبدأ من <span id="p-card">149</span> <span class="curr-label">SAR</span></div>
+          <div class="tmpl-price lang-en">From <span id="p-card-en">149</span> <span class="curr-label">SAR</span></div>
+        </div>
+      </div>
+      <div class="tmpl-card">
+        <div class="tmpl-thumb" style="background:linear-gradient(135deg,#1a0a0a,#3d1010)">🏢</div>
+        <div class="tmpl-info">
+          <div class="tmpl-name lang-ar">بطاقة أعمال — شركة أو مشروع</div>
+          <div class="tmpl-name lang-en">Business Card — Company / Brand</div>
+          <div class="tmpl-desc lang-ar">هوية رقمية متكاملة لشركتك أو مشروعك — شعار، معلومات، وتواصل مباشر بلمسة فوتوغرافية احترافية.</div>
+          <div class="tmpl-desc lang-en">Complete digital identity for your company — logo, info, and direct contact with a professional touch.</div>
+          <div class="tmpl-badge lang-ar">احترافي</div>
+          <div class="tmpl-badge lang-en">Professional</div>
+          <div class="tmpl-price lang-ar">يبدأ من <span id="p-brand">1,000</span> <span class="curr-label">SAR</span></div>
+          <div class="tmpl-price lang-en">From <span id="p-brand-en">1,000</span> <span class="curr-label">SAR</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section pricing" id="pricing">
+  <div class="section-inner">
+    <div class="text-center reveal">
+      <p class="sec-eyebrow lang-ar">الأسعار</p>
+      <p class="sec-eyebrow lang-en">Pricing</p>
+    </div>
+    <div class="plans reveal">
+      <div class="plan">
+        <div class="plan-name lang-ar">الأساسية</div>
+        <div class="plan-name lang-en">Basic</div>
+        <div class="plan-price" id="price-basic">149</div>
+        <div class="plan-currency lang-ar"><span class="curr-label">SAR</span> · يصل إلى <span id="price-basic-max">200</span> <span class="curr-label">SAR</span> حسب الإضافات</div>
+        <div class="plan-currency lang-en"><span class="curr-label">SAR</span> · up to <span id="price-basic-max-en">200</span> <span class="curr-label">SAR</span> based on extras</div>
+        <ul class="plan-features">
+          <li>موقع إلكتروني كامل</li>
+          <li>QR مخصص (باركود)</li>
+          <li>دعم العربية والإنجليزية</li>
+          <li>تسليم خلال يومين إلى ثلاثة أيام</li>
+          <li>دومين .com إضافي بـ 150 ريال</li>
+        </ul>
+        <button class="plan-btn outline lang-ar" onclick="window.location.href='pago-form.html'">ابدأ الآن</button>
+        <button class="plan-btn outline lang-en" onclick="window.location.href='pago-form.html'">Get Started</button>
+      </div>
+      <div class="plan featured">
+        <div class="plan-badge lang-ar">الأكثر طلباً</div>
+        <div class="plan-badge lang-en">Most Popular</div>
+        <div class="plan-name lang-ar">المميزة</div>
+        <div class="plan-name lang-en">Premium</div>
+        <div class="plan-price" id="price-premium">199</div>
+        <div class="plan-currency lang-ar"><span class="curr-label">SAR</span> · يصل إلى <span id="price-premium-max">599</span> <span class="curr-label">SAR</span> حسب الإضافات</div>
+        <div class="plan-currency lang-en"><span class="curr-label">SAR</span> · up to <span id="price-premium-max-en">599</span> <span class="curr-label">SAR</span> based on extras</div>
+        <ul class="plan-features">
+          <li>كل ما في الأساسية</li>
+          <li>دومين .com إضافي بـ 150 ريال</li>
+          <li>بورتفوليو ومشاريع</li>
+          <li>تعديل مجاني مرة واحدة</li>
+          <li>نسخة PDF</li>
+          <li>أولوية في التسليم</li>
+        </ul>
+        <button class="plan-btn solid lang-ar" onclick="window.location.href='pago-form.html'">احصل عليها</button>
+        <button class="plan-btn solid lang-en" onclick="window.location.href='pago-form.html'">Get It</button>
+      </div>
+      <div class="plan">
+        <div class="plan-name lang-ar">الشركات</div>
+        <div class="plan-name lang-en">Business</div>
+        <div class="plan-price" id="price-biz">1,000</div>
+        <div class="plan-currency lang-ar"><span class="curr-label">SAR</span> · يصل إلى <span id="price-biz-max">20,000</span> <span class="curr-label">SAR</span> حسب الإضافات</div>
+        <div class="plan-currency lang-en"><span class="curr-label">SAR</span> · up to <span id="price-biz-max-en">20,000</span> <span class="curr-label">SAR</span> based on extras</div>
+        <ul class="plan-features">
+          <li>خمسة مواقع إلكترونية</li>
+          <li>ندعم دومينك الحالي</li>
+          <li>هوية بصرية موحدة</li>
+          <li>دعم مخصص وأولوية</li>
+          <li>تسليم خلال ثلاثة أيام عمل</li>
+        </ul>
+        <button class="plan-btn outline lang-ar" onclick="window.location.href='pago-form.html'">تواصل معنا</button>
+        <button class="plan-btn outline lang-en" onclick="window.location.href='pago-form.html'">Contact Us</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPLAINER -->
+<section class="section explainer" id="explainer">
+  <div class="section-inner">
+    <div class="text-center reveal">
+      <p class="sec-eyebrow lang-ar">هل تعرف ما الذي تدفع مقابله؟</p>
+      <p class="sec-eyebrow lang-en">Know what you're paying for?</p>
+      <h2 class="sec-title lang-ar">ما الذي تحصل عليه بالضبط؟</h2>
+      <h2 class="sec-title lang-en">What exactly do you get?</h2>
+      <p class="sec-sub lang-ar">بدون مصطلحات تقنية — كل شيء واضح.</p>
+      <p class="sec-sub lang-en">No technical jargon — everything made clear.</p>
+    </div>
+    <div class="explainer-grid reveal">
+      <div class="expl-card">
+        <div class="expl-icon">🌐</div>
+        <div class="expl-title lang-ar">الدومين — رابطك على الإنترنت</div>
+        <div class="expl-title lang-en">Domain — your link on the internet</div>
+        <div class="expl-desc lang-ar">مثل عنوان بيتك، لكن على الإنترنت. بدونه لن يستطيع أحد الوصول إليك. نستخدم امتداد <strong>.com العالمي</strong> الذي يعمل مع أي دولة بدون قيود — <strong>بـ 150 ريال إضافي</strong> على أي باقة.</div>
+        <div class="expl-desc lang-en">Like your home address, but on the internet. Without it, no one can reach you. We use the global <strong>.com extension</strong> — works anywhere, no restrictions — <strong>for an extra 150 SAR</strong> on any plan.</div>
+      </div>
+      <div class="expl-card">
+        <div class="expl-icon">☁️</div>
+        <div class="expl-title lang-ar">الاستضافة — مكان سكن موقعك</div>
+        <div class="expl-title lang-en">Hosting — where your site lives</div>
+        <div class="expl-desc lang-ar">تخيّل أن موقعك ملف محفوظ في مكان ما — الاستضافة هي هذا المكان. بدونها لا يظهر الموقع لأحد. مضمونة لمدة <strong>شهر كامل</strong> من تاريخ التسليم.</div>
+        <div class="expl-desc lang-en">Think of your site as a file saved somewhere — hosting is that place. Without it, no one sees your site. Guaranteed for a <strong>full month</strong> from delivery date.</div>
+      </div>
+      <div class="expl-card">
+        <div class="expl-icon">🔒</div>
+        <div class="expl-title lang-ar">شهادة SSL — القفل الأخضر</div>
+        <div class="expl-title lang-en">SSL Certificate — the green lock</div>
+        <div class="expl-desc lang-ar">الذي يجعل موقعك يبدأ بـ https وتظهر علامة الأمان، مما يعني أن بياناتك وبيانات زوار موقعك <strong>محمية بالكامل</strong>.</div>
+        <div class="expl-desc lang-en">What makes your site start with https and show the security badge. Your data and your visitors' data are <strong>fully protected</strong>.</div>
+      </div>
+      <div class="expl-card expl-highlight">
+        <div class="expl-icon">📦</div>
+        <div class="expl-title lang-ar">ما الذي تحصل عليه بالضبط؟</div>
+        <div class="expl-title lang-en">What exactly do you get?</div>
+        <div class="expl-desc lang-ar">موقع جاهز 100% — تملأ النموذج، ونحن نبني، وتستلم رابطك وباركود QR خلال <strong>يومين إلى ثلاثة أيام</strong>. بدون أي تعقيد.</div>
+        <div class="expl-desc lang-en">A 100% ready website — fill the form, we build it, and you receive your link and QR code within <strong>2–3 days</strong>. No hassle.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="cta">
+  <h2 class="lang-ar">هل تريد البدء في مشروعك الرقمي؟</h2>
+  <h2 class="lang-en">Ready to start your digital journey?</h2>
+  <p class="lang-ar">أدخل رقمك وسنتواصل معك عبر واتساب</p>
+  <p class="lang-en">Enter your number and we'll contact you via WhatsApp</p>
+
+  <!-- Success message -->
+  <div class="cta-success" id="ctaSuccess">
+    <span>✓</span>
+    <span class="lang-ar">تم الإرسال! سنتواصل معك قريباً على واتساب 🎉</span>
+    <span class="lang-en">Sent! We'll reach out to you on WhatsApp soon 🎉</span>
+  </div>
+
+  <div class="cta-phone" id="ctaForm">
+    <input class="cta-input" type="tel" id="phoneInput" placeholder="+966 5X XXX XXXX">
+    <button class="btn-cta lang-ar" onclick="sendWhatsApp()">تواصل معي</button>
+    <button class="btn-cta lang-en" onclick="sendWhatsApp()">Contact Me</button>
+  </div>
+
+  <!-- Direct contact links -->
+  <div class="contact-strip">
+    <a class="contact-link lang-ar" href="https://wa.me/966537292913" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      واتساب
+    </a>
+    <a class="contact-link lang-en" href="https://wa.me/966537292913" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      WhatsApp
+    </a>
+    <a class="contact-link lang-ar" href="mailto:majd2.abdulaziz@gmail.com">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+      البريد الإلكتروني
+    </a>
+    <a class="contact-link lang-en" href="mailto:majd2.abdulaziz@gmail.com">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+      Email
+    </a>
+  </div>
+
+  <p class="cta-terms lang-ar" style="margin-top:1.4rem">
+    ⏰ <span>أوقات العمل:</span> الأحد — الخميس &nbsp;·&nbsp;
+    📅 <span>وقت التسليم:</span> يومان إلى ثلاثة أيام عمل حسب الباقة &nbsp;·&nbsp;
+    💳 <span>الدفع:</span> كامل عند تأكيد الطلب &nbsp;·&nbsp;
+    🛍️ <span>التقسيط:</span> متاح عبر تابي وتمارا
+  </p>
+  <p class="cta-terms lang-en" style="margin-top:1.4rem">
+    ⏰ <span>Working hours:</span> Sun — Thu &nbsp;·&nbsp;
+    📅 <span>Delivery:</span> 2–3 business days depending on package &nbsp;·&nbsp;
+    💳 <span>Payment:</span> Full payment upon order confirmation &nbsp;·&nbsp;
+    🛍️ <span>Installments:</span> Available via Tabby & Tamara
+  </p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">Pago</div>
+    <div class="footer-links">
+      <a class="footer-contact-link" href="https://wa.me/966537292913" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        +966 53 729 2913
+      </a>
+      <a class="footer-contact-link" href="mailto:majd2.abdulaziz@gmail.com">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        majd2.abdulaziz@gmail.com
+      </a>
+    </div>
+    <div>
+      <div class="footer-text lang-ar">© 2026 Pago · جميع الحقوق محفوظة</div>
+      <div class="footer-text lang-en">© 2026 Pago · All rights reserved</div>
+      <div class="footer-cert lang-ar">موثّقة رسمياً · <span>وزارة الموارد البشرية والتنمية الاجتماعية</span> · FL-896217957</div>
+      <div class="footer-cert lang-en">Officially Licensed · <span>Ministry of Human Resources & Social Development</span> · FL-896217957</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Mobile menu
+function toggleDpMenu(){document.getElementById('dpMobileMenu').classList.toggle('open')}
+
+// Lang toggle
+function toggleLang(){
+  const body=document.body;
+  const btn=document.getElementById('langBtn');
+  const btnM=document.getElementById('langBtnMobile');
+  body.classList.toggle('en');
+  body.setAttribute('dir',body.classList.contains('en')?'ltr':'rtl');
+  const label=body.classList.contains('en')?'ع':'EN';
+  if(btn)btn.textContent=label;
+  if(btnM)btnM.textContent=label;
+}
+
+// Currency desktop
+let currRate=1,currSym='SAR';
+const basePrices={basic:149,basicMax:200,premium:199,premiumMax:599,biz:1000,bizMax:20000,cvBasic:149,cvPro:590,menu:999,card:149,brand:1000};
+
+function toggleCurrency(){document.getElementById('currDropdown').classList.toggle('open')}
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.currency-wrap:not(.dp-mobile-tools .currency-wrap)')){
+    const dd=document.getElementById('currDropdown');
+    if(dd)dd.classList.remove('open');
+  }
+});
+
+// Mobile currency sheet
+function toggleMobileCurrencySheet(){
+  document.getElementById('mobileCurrSheet').classList.toggle('open');
+}
+document.addEventListener('click',e=>{
+  const sheet=document.getElementById('mobileCurrSheet');
+  if(sheet&&sheet.classList.contains('open')&&!e.target.closest('#mobileCurrSheet')&&!e.target.closest('#currBtnMobile')){
+    sheet.classList.remove('open');
+  }
+});
+
+function setCurrencyMobile(code,flag,rate){
+  currRate=rate;currSym=code;
+  document.getElementById('currFlagMobile').textContent=flag;
+  document.getElementById('currCodeMobile').textContent=code;
+  document.getElementById('currFlag').textContent=flag;
+  document.getElementById('currCode').textContent=code;
+  document.querySelectorAll('#mobileCurrSheet .currency-option').forEach(o=>o.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  document.getElementById('mobileCurrSheet').classList.remove('open');
+  updatePrices();
+}
+
+function setCurrency(code,flag,rate,label){
+  currRate=rate;currSym=code;
+  document.getElementById('currFlag').textContent=flag;
+  document.getElementById('currCode').textContent=code;
+  const mFlag=document.getElementById('currFlagMobile');
+  const mCode=document.getElementById('currCodeMobile');
+  if(mFlag)mFlag.textContent=flag;
+  if(mCode)mCode.textContent=code;
+  document.querySelectorAll('#currDropdown .currency-option').forEach(o=>o.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  document.getElementById('currDropdown').classList.remove('open');
+  updatePrices();
+}
+
+function conv(sar){
+  const v=sar*currRate;
+  return(currSym==='KWD'||currSym==='BHD'||currSym==='OMR')?v.toFixed(2):Math.round(v);
+}
+
+function updatePrices(){
+  document.querySelectorAll('.curr-label').forEach(el=>el.textContent=currSym);
+  const map={
+    'price-basic':basePrices.basic,'price-premium':basePrices.premium,'price-biz':basePrices.biz,
+    'price-basic-max':basePrices.basicMax,'price-basic-max-en':basePrices.basicMax,
+    'price-premium-max':basePrices.premiumMax,'price-premium-max-en':basePrices.premiumMax,
+    'price-biz-max':basePrices.bizMax,'price-biz-max-en':basePrices.bizMax,
+    'p-cv-basic':basePrices.cvBasic,'p-cv-basic-en':basePrices.cvBasic,
+    'p-cv-pro':basePrices.cvPro,'p-cv-pro-en':basePrices.cvPro,
+    'p-menu':basePrices.menu,'p-menu-en':basePrices.menu,
+    'p-card':basePrices.card,'p-card-en':basePrices.card,
+    'p-brand':basePrices.brand,'p-brand-en':basePrices.brand
+  };
+  Object.entries(map).forEach(([id,price])=>{
+    const el=document.getElementById(id);
+    if(el)el.textContent=conv(price);
+  });
+}
+
+// WhatsApp CTA with feedback
+function sendWhatsApp(){
+  const phone=document.getElementById('phoneInput').value.trim();
+  const isEn=document.body.classList.contains('en');
+  if(!phone){
+    document.getElementById('phoneInput').focus();
+    document.getElementById('phoneInput').style.borderColor='rgba(167,139,250,0.6)';
+    setTimeout(()=>document.getElementById('phoneInput').style.borderColor='',1500);
+    return;
+  }
+  const msg=isEn
+    ?`Hello Pago! I'm interested in building my digital page. My number: ${phone}`
+    :`مرحباً Pago! أنا مهتم ببناء صفحتي الرقمية. رقمي: ${phone}`;
+  window.open(`https://wa.me/966537292913?text=${encodeURIComponent(msg)}`,'_blank');
+  document.getElementById('ctaForm').style.display='none';
+  document.getElementById('ctaSuccess').classList.add('show');
+}
+
+// Reveal
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
