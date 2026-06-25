@@ -47,8 +47,9 @@ a{text-decoration:none;color:inherit}
   100%{transform:translate(0,0)}
 }
 #cursor-pupil{animation:cursor-pupil 3s ease-in-out infinite}
-@media(hover:none),(pointer:coarse){#pago-cursor{display:none}body{cursor:auto}}
-
+#pago-cursor {
+  display: block !important;
+}
 /* ===== HERO ===== */
 .dp-hero{position:relative;height:100vh;display:flex;flex-direction:column;overflow:hidden;background:#000;direction:ltr;font-family:var(--sans)}
 .dp-video-bg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
@@ -905,22 +906,37 @@ document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 const cursor = document.getElementById('pago-cursor');
 let mx = -100, my = -100;
 
+// تحديث الموضع عند تحريك الماوس (للكمبيوتر)
 document.addEventListener('mousemove', e => {
   mx = e.clientX; my = e.clientY;
+  updateCursorPosition();
+});
+
+// تحديث الموضع عند اللمس أو السحب (للجوال والأيباد)
+document.addEventListener('touchmove', e => {
+  if(e.touches.length > 0) {
+    mx = e.touches[0].clientX;
+    my = e.touches[0].clientY;
+    updateCursorPosition();
+  }
+}, { passive: true });
+
+document.addEventListener('touchstart', e => {
+  if(e.touches.length > 0) {
+    mx = e.touches[0].clientX;
+    my = e.touches[0].clientY;
+    updateCursorPosition();
+  }
+}, { passive: true });
+
+function updateCursorPosition() {
   cursor.style.left = mx + 'px';
   cursor.style.top  = my + 'px';
-});
+}
 
+// تأثير الضغط (Clicking) للماوس واللمس
 document.addEventListener('mousedown', () => cursor.classList.add('clicking'));
 document.addEventListener('mouseup',   () => cursor.classList.remove('clicking'));
-
-document.querySelectorAll('a,button,[onclick],input,select,textarea,.feat-card,.tmpl-card,.plan,.service-card').forEach(el => {
-  el.addEventListener('mouseenter', () => cursor.classList.add('hovering'));
-  el.addEventListener('mouseleave', () => cursor.classList.remove('hovering'));
-});
-
-document.addEventListener('mouseleave', () => cursor.style.opacity = '0');
-document.addEventListener('mouseenter', () => cursor.style.opacity = '1');
 </script>
 
 </body>
